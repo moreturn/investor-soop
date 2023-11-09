@@ -87,7 +87,7 @@ TextStyle label2({Color? color, bool? bold}) {
       fontWeight: (bold ?? false) ? FontWeight.bold : FontWeight.w500);
 }
 TextStyle label3({Color? color, bool? bold}) {
-  print(color);
+
   return TextStyle(
       color: color ?? Colors.white,
       fontSize: 14,
@@ -95,7 +95,7 @@ TextStyle label3({Color? color, bool? bold}) {
 }
 
 TextStyle label4({Color? color, bool? bold}) {
-  print(color);
+
   return TextStyle(
       color: color ?? Colors.white,
       fontSize: 11,

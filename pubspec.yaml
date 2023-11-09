@@ -30,8 +30,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg:
-
+  flutter_svg: 2.0.8
+  syncfusion_flutter_charts: 23.1.43
+  intl: 0.18.1
+  flutter_secure_storage: 9.0.0
+  http: 1.1.0
+  fl_query: 1.0.0
+  shimmer:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -40,6 +45,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  get: 4.6.6
+  toastify:
+  another_flushbar:
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -62,6 +70,22 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/icons/
+
+
+  fonts:
+    - family: SpoqaHanSansNeo
+      fonts:
+        - asset: assets/fonts/SpoqaHanSansNeo-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/SpoqaHanSansNeo-Light.ttf
+          weight: 300
+        - asset: assets/fonts/SpoqaHanSansNeo-regular.ttf
+          weight: 400
+        - asset: assets/fonts/SpoqaHanSansNeo-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/SpoqaHanSansNeo-Bold.ttf
+          weight: 700
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
