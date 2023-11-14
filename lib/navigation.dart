@@ -4,6 +4,7 @@ import 'package:invesotr_soop/page/auth/login.dart';
 import 'package:invesotr_soop/page/income/income.dart';
 import 'package:invesotr_soop/page/property/detail/tab.dart';
 import 'package:invesotr_soop/page/property/property.dart';
+import 'package:invesotr_soop/page/setting/change_password.dart';
 import 'package:invesotr_soop/page/setting/setting.dart';
 import 'package:invesotr_soop/page/tab/tab.dart';
 
@@ -14,6 +15,7 @@ abstract class Routes {
   static const property = '/property';
   static const propertyDetailTab = '/property_detail';
   static const setting = '/setting';
+  static const changePassword = '/change_password';
 }
 
 final appPages = [
@@ -28,7 +30,7 @@ final appPages = [
   ),
   GetPage(
     name: Routes.income,
-    page: () => const IncomePage(),
+    page: () => IncomePage(),
     middlewares: [AuthGuard()],
   ),
   GetPage(
@@ -41,11 +43,13 @@ final appPages = [
     page: () => const PropertyDetailTab(),
     middlewares: [AuthGuard()],
   ),
-
-
   GetPage(
     name: Routes.setting,
     page: () => SettingPage(),
     middlewares: [AuthGuard()],
   ),
+  GetPage(
+      name: Routes.changePassword,
+      page: () => ChangePasswordPage(),
+      middlewares: [AuthGuard()])
 ];

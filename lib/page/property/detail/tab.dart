@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:invesotr_soop/component/typograph.dart';
-import 'package:invesotr_soop/page/property/detail/end.dart';
-import 'package:invesotr_soop/page/property/detail/proceed.dart';
+import 'package:invesotr_soop/page/property/controller/end_scroll_controller.dart';
+import 'package:invesotr_soop/page/property/controller/proceed_scroll_controller.dart';
+import 'package:invesotr_soop/page/property/detail/detail.dart';
 
 class PropertyDetailTab extends StatelessWidget {
   const PropertyDetailTab({super.key});
 
   @override
   Widget build(BuildContext context) {
+    String title = Get.arguments['type'] == 'COLLATERAL' ? "GPL" : "담보대출";
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("GPL"),
+          title: Text(title),
           bottom: TabBar(
             automaticIndicatorColorAdjustment: true,
             indicatorColor: Colors.black,
@@ -27,11 +31,10 @@ class PropertyDetailTab extends StatelessWidget {
               Tab(text: '상환완료'),
             ],
           ),
-
         ),
         body: TabBarView(children: [
-          ProceedPage(),
-          EndPage(),
+          DetailPage(key: GlobalKey(),controller : Get.put(ProceedScrollController(type: Get.arguments['type']))),
+          DetailPage(key: GlobalKey(),controller : Get.put(EndScrollController(type:  Get.arguments['type']))),
         ]),
       ),
     );

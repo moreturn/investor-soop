@@ -1,6 +1,8 @@
 import 'package:fl_query/fl_query.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:invesotr_soop/controller/tab_controller.dart';
 import 'package:invesotr_soop/navigation.dart';
 import 'package:invesotr_soop/page/income/controller/income_controller.dart';
@@ -8,18 +10,19 @@ import 'package:invesotr_soop/page/property/controller/property_controller.dart'
 import 'package:invesotr_soop/services/auth_service.dart';
 import 'package:invesotr_soop/services/env_service.dart';
 import 'package:invesotr_soop/services/http_service.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  initializeDateFormatting();
   await Get.putAsync(() => AuthService().init());
   EnvService env = await Get.putAsync(() => EnvService().init());
   await Get.putAsync(() => HttpService().init());
   Get.put<MainTabController>(MainTabController());
 
-
   await QueryClient.initialize(
       cachePrefix: env.isProd.isTrue ? 'fl_query_prod' : 'fl_query_dev');
-
+  Intl.defaultLocale = 'ko';
   runApp(const MyApp());
 }
 
@@ -36,6 +39,15 @@ class MyApp extends StatelessWidget {
         title: 'Investor',
         debugShowCheckedModeBanner: !env.isProd.value,
         getPages: appPages,
+        locale: Locale('ko',''),
+        supportedLocales: [
+          Locale('ko', ''), // Korean, no country code
+        ],
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
         initialRoute: auth.isLogin.value ? Routes.tab : Routes.login,
         initialBinding: InitialBinding(),
         theme: ThemeData(
@@ -51,7 +63,5 @@ class MyApp extends StatelessWidget {
 
 class InitialBinding implements Bindings {
   @override
-  void dependencies() {
-
-  }
+  void dependencies() {}
 }

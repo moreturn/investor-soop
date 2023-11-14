@@ -8,7 +8,8 @@ class EnvService extends GetxController {
   get serviceCode => '1';
   get companyGroupCode => isProd.isTrue ? '28ab2275' : '6b0eb29f';
   get apiEndPoint => isProd.isFalse
-      ? 'http://localhost:3005/investor/'
+      // ? 'http://localhost:3005/investor/'
+      ? 'https://tapi.moneyparking.co.kr/investor/'
       : 'https://api.moneyparking.co.kr/investor/';
 
   Future<EnvService> init() async {

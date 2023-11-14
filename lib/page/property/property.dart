@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:invesotr_soop/component/color.dart';
 import 'package:invesotr_soop/component/skeleton.dart';
 import 'package:invesotr_soop/component/typograph.dart';
+import 'package:invesotr_soop/model/property.dart';
 import 'package:invesotr_soop/page/property/@bottom_sheet.dart';
 import 'package:invesotr_soop/page/property/controller/property_controller.dart';
 import 'package:invesotr_soop/services/auth_service.dart';
@@ -27,17 +28,18 @@ class PropertyPage extends GetView<PropertyController> {
         builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
             int seriesIndex) {
           return Container(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               child: Text(
                 '${data.x.toString().substring(0, 4)}년${data.x.toString().substring(4, 6)}월 : ${numberToKor((data.y).toInt().toString(), isAll: true)}원',
                 style: const TextStyle(color: Colors.white),
               ));
         });
-    print(Get.find<AuthService>().userId);
+
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: QueryBuilder<FetchedPropertyValue, dynamic>(
-          Get.find<AuthService>().userId, () => fetch(), onData: (value) {
+          '${Get.find<AuthService>().userId}-property-summary', () => fetch(),
+          onData: (value) {
         // Map<String, int> credit = value['data']['credit'];
       }, onError: (error) {
         print(error); /**/
@@ -62,8 +64,13 @@ class PropertyPage extends GetView<PropertyController> {
                         GestureDetector(
                           onTap: () {
                             Get.bottomSheet(
-                                PropertyBottomSheet(
-                                    controller, query.data!.lastMonth),
+                                Obx((){
+                                  print(controller.showType);
+                                  return PropertyBottomSheet(
+                                    controller,
+                                    controller.selector(query.data!.lastMonth, query.data!.lastMonthCollateral, query.data!.lastMonthCredit),
+                                  );
+                                }),
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(20),
@@ -104,7 +111,7 @@ class PropertyPage extends GetView<PropertyController> {
                           '${controller.selector(query.data!.lastMonth, query.data!.lastMonthCollateral, query.data!.lastMonthCredit).setComma()} 원',
                           style: h1(bold: true, color: Colors.black)),
                   const SizedBox(height: 16),
-                  query.isLoading || query.data == null
+                  (query.isLoading || query.data == null)
                       ? const Skeleton(
                           width: double.infinity,
                           height: 24,
@@ -112,17 +119,22 @@ class PropertyPage extends GetView<PropertyController> {
                       : controller.showType != PropertyShowType.none
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(4),
-                              child: LinearProgressIndicator(
-                                backgroundColor: yellow,
-                                color: green1,
-                                value: controller.selector(
-                                    query.data!.lastMonthCollateral /
-                                        query.data!.lastMonthCredit /
-                                        2,
-                                    1,
-                                    0),
-                                minHeight: 24,
-                              ),
+                              child: query.data!.lastMonth == 0
+                                  ? const LinearProgressIndicator(
+                                      backgroundColor: grayLight2,
+                                      value: 0,
+                                      minHeight: 24,
+                                    )
+                                  : LinearProgressIndicator(
+                                      backgroundColor: yellow,
+                                      color: green1,
+                                      value: controller.selector(
+                                          (query.data!.lastMonthCollateral /
+                                              query.data!.lastMonth),
+                                          1,
+                                          0),
+                                      minHeight: 24,
+                                    ),
                             )
                           : Container(),
                   const SizedBox(height: 24),
@@ -145,7 +157,10 @@ class PropertyPage extends GetView<PropertyController> {
                                       color: warmGray50,
                                       child: InkWell(
                                         onTap: () {
-                                          Get.toNamed('/property_detail/collateral');
+                                          Get.toNamed('/property_detail',
+                                              arguments: {
+                                                "type": "COLLATERAL"
+                                              });
                                         },
                                         child: Stack(
                                           children: [
@@ -239,7 +254,8 @@ class PropertyPage extends GetView<PropertyController> {
                                       color: warmGray50,
                                       child: InkWell(
                                         onTap: () {
-                                          Get.toNamed('/property_detail/credit');
+                                          Get.toNamed('/property_detail',
+                                              arguments: {"type": "CREDIT"});
                                         },
                                         child: Stack(
                                           children: [
@@ -342,6 +358,7 @@ class PropertyPage extends GetView<PropertyController> {
                         )
                       : SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
+                          reverse: true,
                           child: Container(
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.transparent)),
@@ -367,8 +384,14 @@ class PropertyPage extends GetView<PropertyController> {
                                           6),
                             ),
                             child: SfCartesianChart(
+                                plotAreaBorderWidth: 0,
                                 primaryXAxis: CategoryAxis(
-                                  isVisible: false,
+                                  isVisible: true,
+                                  axisLabelFormatter: (s) {
+                                    return ChartAxisLabel(
+                                        '${s.text.substring(4, 6)}월',
+                                        label3(color: deepBlue));
+                                  },
                                   majorGridLines:
                                       const MajorGridLines(width: 0),
                                 ),
@@ -380,13 +403,6 @@ class PropertyPage extends GetView<PropertyController> {
                                           query.data!.collateralChartMin,
                                           query.data!.creditChartMin)
                                       .toDouble(),
-                                  maximum: controller
-                                      .selector(
-                                          query.data!.chartMax,
-                                          query.data!.collateralChartMax,
-                                          query.data!.creditChartMax)
-                                      .toDouble(),
-                                  interval: 10,
                                   rangePadding: ChartRangePadding.round,
                                   majorGridLines:
                                       const MajorGridLines(width: 0),
@@ -399,8 +415,7 @@ class PropertyPage extends GetView<PropertyController> {
                                       isVisible: true,
                                     ),
                                     dataLabelMapper: (d, i) {
-                                      return NumberFormat('###,###,###,###,###')
-                                          .format((d.y / 10000).toInt());
+                                      return '${NumberFormat('###,###,###,###,###').format((d.y / 10000).toInt())}만원';
                                     },
                                     selectionBehavior: SelectionBehavior(
                                       enable: true,

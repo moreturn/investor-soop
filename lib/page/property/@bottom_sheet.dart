@@ -122,7 +122,7 @@ class PropertyBottomSheet extends StatelessWidget {
                       onPressed: Get.back,
                       child: Text(
                         '닫기',
-                        style: label2(),
+                        style: label2(color: Colors.white),
                       ),
                     )
                   ],

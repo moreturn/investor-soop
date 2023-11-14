@@ -22,7 +22,6 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(Get.previousRoute);
     return Scaffold(
       appBar: AppBar(),
       body: Material(
@@ -31,119 +30,133 @@ class LoginPage extends StatelessWidget {
           child: Container(
             color: Colors.white,
             child: SafeArea(
-              child: Stack(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                          alignment: Alignment.center,
-                          height: 280,
-                          child:
-                              SvgPicture.asset('assets/images/login-logo.svg')),
-                      Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 28),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: warmGray,
-                                    border: Border.all(color: lightGray),
-                                    borderRadius: BorderRadius.circular(6)),
-                                child: TextFormField(
-                                  autovalidateMode: AutovalidateMode.always,
-                                  onSaved: (value) {
-                                    _id = value as String;
+                  Container(
+                      alignment: Alignment.center,
+                      height: 280,
+                      child: SvgPicture.asset('assets/images/login-logo.svg')),
+                  Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 28),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            onSaved: (value) {
+                              _id = value as String;
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return '필수 입력';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              fillColor: warmGray50,
+                              filled: true,
+                              border: OutlineInputBorder(),
+                              hintText: '아이디',
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              onSaved: (value) {
+                                _password = value as String;
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return '필수 입력';
+                                }
+                                return null;
+                              },
+                              obscureText: true,
+                              decoration: const InputDecoration(
+                                fillColor: warmGray50,
+                                filled: true,
+                                border: OutlineInputBorder(),
+                                hintText: '비밀번호',
+                              )),
+                          const SizedBox(height: 27),
+                          Button(
+                            onPressed: () async {
+                              final authService = Get.find<AuthService>();
+                              try {
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                }
+                                await authService.login(
+                                    id: _id, password: _password);
+
+                                Get.offAllNamed('/tab');
+                              } catch (e) {
+                                Flushbar(
+                                  message: "로그인 실패 \n ${e.toString()}",
+                                  duration: const Duration(seconds: 3),
+                                  backgroundColor: hot,
+                                  flushbarPosition: FlushbarPosition.TOP,
+                                  isDismissible: true,
+                                ).show(Get.context!);
+                              }
+                            },
+                            child: Text(
+                              '로그인',
+                              style: label2(color: Colors.white),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 28,
+                          ),
+                          Navigator.of(context).canPop()
+                              ? Container()
+                              : InkWell(
+                                  onTap: () {
+                                    final authService = Get.find<AuthService>();
+                                    authService.guestLogin();
+                                    Get.offAllNamed('/tab');
                                   },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return '필수 입력';
-                                    }
-                                    return null;
-                                  },
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    hintText: '아이디',
+                                  child: Text(
+                                    '로그인 하지 않고 둘러보기 >',
+                                    style: label3(color: deepBlue)
+                                        .copyWith(fontWeight: FontWeight.w500),
                                   ),
                                 ),
+                        ],
+                      )),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          '또는,',
+                          style: h6(color: Colors.black54),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                            ),
+                            child: Button(
+                              color: const Color(0xFFFAE300),
+                              child: Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                spacing: 4,
+                                children: [
+                                  SvgPicture.asset(
+                                      'assets/icons/ic_kakaro.svg'),
+                                  Text('카카오톡 상담하기',
+                                      style: label2(color: Colors.black))
+                                ],
                               ),
-                              const SizedBox(height: 10),
-                              Container(
-                                decoration: BoxDecoration(
-                                    color: warmGray,
-                                    border: Border.all(color: lightGray),
-                                    borderRadius: BorderRadius.circular(6)),
-                                child: TextFormField(
-                                    onSaved: (value) {
-                                      _password = value as String;
-                                    },
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return '필수 입력';
-                                      }
-                                      return null;
-                                    },
-                                    obscureText: true,
-                                    decoration: InputDecoration(
-                                      fillColor: Colors.blue,
-                                      border: OutlineInputBorder(),
-                                      hintText: '비밀번호',
-                                    )),
-                              ),
-                              const SizedBox(height: 27),
-                              Button(
-                                onPressed: () async {
-                                  final authService = Get.find<AuthService>();
-                                  try {
-                                    if (_formKey.currentState!.validate()) {
-                                      _formKey.currentState!.save();
-                                    }
-                                    await authService.login(
-                                        id: _id, password: _password);
-
-                                    Get.offAllNamed('/tab');
-                                  } catch (e) {
-                                    Flushbar(
-                                      message: "로그인 실패 \n ${e.toString()}",
-                                      duration: const Duration(seconds: 3),
-                                      backgroundColor: hot,
-                                      flushbarPosition: FlushbarPosition.TOP,
-                                      isDismissible: true,
-                                    ).show(Get.context!);
-                                  }
-                                },
-                                child: Text(
-                                  '로그인',
-                                  style: label2(),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 28,
-                              ),
-                              Navigator.of(context).canPop()
-                                  ? Container()
-                                  : Container(
-                                      child: Text(
-                                        '둘러보기 >',
-                                        style: label3(color: deepBlue),
-                                      ),
-                                    ),
-                              //TODO : 높이 가변적으로
-                              const SizedBox(
-                                height: 120,
-                              ),
-                              Button(
-                                color: Colors.yellow,
-                                width: double.infinity,
-                                child: Text(
-                                  '카카오톡 문의',
-                                  style: label2(color: Colors.black),
-                                ),
-                              ),
-                            ],
-                          )),
-                    ],
+                            )),
+                      ],
+                    ),
                   ),
                 ],
               ),

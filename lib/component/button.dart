@@ -6,9 +6,10 @@ class Button extends StatelessWidget {
   final Widget child;
   final Color? color;
   final Function? onPressed;
+  final Color? borderColor;
 
   Button(
-      {Key? key, required this.child, this.width, this.color, this.onPressed})
+      {Key? key, required this.child, this.width, this.color, this.onPressed, this.borderColor})
       : super(key: key);
 
   @override
@@ -19,8 +20,9 @@ class Button extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: color ?? deepBlue,
+          shadowColor: Colors.transparent,
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),side: BorderSide(color: borderColor ?? color ?? deepBlue)),
         ),
         onPressed: () async {
           onPressed?.call();

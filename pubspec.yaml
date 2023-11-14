@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations: # Add this line
+    sdk: flutter         # Add this line
   flutter_svg: 2.0.8
   syncfusion_flutter_charts: 23.1.43
   intl: 0.18.1
@@ -37,6 +39,9 @@ dependencies:
   http: 1.1.0
   fl_query: 1.0.0
   shimmer:
+  encrypt:
+  fast_rsa:
+  rsa_encrypt:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -55,6 +60,15 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_native_splash: ^2.3.5
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon2.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -71,6 +85,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/public_key/
 
 
   fonts:

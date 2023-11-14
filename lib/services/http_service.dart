@@ -18,11 +18,11 @@ class HttpService extends GetxController {
     return _instance;
   }
 
-  Future<T> post<T>(String url, dynamic body) async {
+  Future<T> post<T>(String url, dynamic body, {String? token}) async {
     try {
       Uri uri = Uri.parse(_env.apiEndPoint + url);
       http.Response res = await http.post(uri, body: body, headers: {
-        "Authorization": await _auth.getToken() ?? '',
+        "Authorization": token ?? await _auth.getToken() ?? '',
         "code": _env.companyGroupCode
       });
 
@@ -36,11 +36,11 @@ class HttpService extends GetxController {
     }
   }
 
-  Future<T> get<T>(String url) async {
+  Future<T> get<T>(String url, {String? token}) async {
     try {
       Uri uri = Uri.parse(_env.apiEndPoint + url);
       http.Response res = await http.get(uri, headers: {
-        "Authorization": await _auth.getToken() ?? '',
+        "Authorization": token ?? await _auth.getToken() ?? '',
         "code": _env.companyGroupCode,
       });
 
@@ -54,11 +54,11 @@ class HttpService extends GetxController {
     }
   }
 
-  Future<T> patch<T>(String url, dynamic body) async {
+  Future<T> patch<T>(String url, dynamic body, {String? token}) async {
     try {
       Uri uri = Uri.parse(_env.apiEndPoint + url);
       http.Response res = await http.patch(uri, body: body, headers: {
-        "Authorization": await _auth.getToken() ?? '',
+        "Authorization": token ?? await _auth.getToken() ?? '',
         "code": _env.companyGroupCode,
       });
 
@@ -72,11 +72,11 @@ class HttpService extends GetxController {
     }
   }
 
-  Future<T> delete<T>(String url, dynamic body) async {
+  Future<T> delete<T>(String url, dynamic body, {String? token}) async {
     try {
       Uri uri = Uri.parse(_env.apiEndPoint + url);
       http.Response res = await http.delete(uri, body: body, headers: {
-        "Authorization": await _auth.getToken() ?? '',
+        "Authorization": token ?? await _auth.getToken() ?? '',
         "code": _env.companyGroupCode,
       });
 

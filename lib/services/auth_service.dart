@@ -1,11 +1,14 @@
 import 'dart:convert';
 
-import 'package:fl_query/fl_query.dart';
-import 'package:get/get.dart';
+import 'package:encrypt/encrypt_io.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
 import 'package:invesotr_soop/controller/tab_controller.dart';
 import 'package:invesotr_soop/services/env_service.dart';
 import 'package:invesotr_soop/services/http_service.dart';
+
+import 'package:fast_rsa/fast_rsa.dart';
 
 class AuthService extends GetxController {
   final RxBool isLogin = false.obs;
@@ -16,14 +19,17 @@ class AuthService extends GetxController {
 
   Future<AuthService> init() async {
     String? value = await storage.read(key: 'tokens');
-    if (value != null) {
+    if (value != null && value != 'guest') {
       tokens.addAll(((jsonDecode(await storage.read(key: 'tokens') ?? '[]'))
               as List<dynamic>)
           .map((d) => Token.fromJson(d))
           .toList());
       userId = tokens.where((element) => element.active).first.id;
-
       isLogin.value = true;
+    } else if (value == 'guest') {
+      userId = 'guest';
+      isGuest(true);
+      isLogin(true);
     } else {
       isLogin.value = false;
     }
@@ -35,6 +41,7 @@ class AuthService extends GetxController {
       isLogin(true);
       isGuest(true);
       userId = 'guest';
+      await storage.write(key: 'tokens', value: 'guest');
       return true;
     } catch (e) {
       throw 'ee';
@@ -43,8 +50,10 @@ class AuthService extends GetxController {
 
   Future<bool> login({required String id, required String password}) async {
     try {
-      dynamic b =
-          await HttpService().post('login', {"id": id, "password": password});
+
+
+      dynamic b = await HttpService()
+          .post('login', {"id": id, "password": await encrypt(password)});
 
       List<Token> tokens =
           ((jsonDecode(await storage.read(key: 'tokens') ?? '[]'))
@@ -82,6 +91,25 @@ class AuthService extends GetxController {
     return true;
   }
 
+  Future<bool> passwordChange(
+      {required String pwd,
+      required String newPwd,
+      required String token}) async {
+    try {
+      dynamic b = await HttpService().patch(
+        'change_password',
+        {"password": await encrypt(pwd), "newPassword": await encrypt(newPwd)},
+        token: token,
+      );
+      print(b);
+      return true;
+    } catch (e) {
+      rethrow;
+    }
+
+    return true;
+  }
+
   Future<bool> active(String id) async {
     isLogin(true);
     isGuest(false);
@@ -99,8 +127,6 @@ class AuthService extends GetxController {
     tokens.addAll(list2.map((d) => Token.fromJson(d)));
     userId = tokens.where((element) => element.active).first.id;
 
-    print(tokens[0].id + ' / ' + tokens[0].active.toString());
-    print(tokens[1].id + ' / ' + tokens[1].active.toString());
     return true;
   }
 
@@ -112,6 +138,13 @@ class AuthService extends GetxController {
             .toList();
     return tokens.where((d) => d.active).firstOrNull?.token;
   }
+}
+
+Future<String> encrypt(String text) async {
+  EnvService env = Get.find<EnvService>();
+  final publicPem = await rootBundle.loadString(
+      'assets/public_key/${env.isProd.isTrue ? 'prod' : 'dev'}.pem');
+  return await RSA.encryptOAEP(text, '', Hash.SHA256, publicPem);
 }
 
 class Token {

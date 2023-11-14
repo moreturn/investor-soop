@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:invesotr_soop/component/color.dart';
+import 'package:invesotr_soop/component/typograph.dart';
 import 'package:invesotr_soop/controller/tab_controller.dart';
 import 'package:invesotr_soop/navigation.dart';
 import 'package:invesotr_soop/page/income/controller/income_controller.dart';
@@ -37,8 +39,8 @@ class TabPage extends GetView<MainTabController> {
             // 선택에 따라 icon·label 색상 변경
 
             // 선택에 따라 label text style 변경
-            unselectedLabelStyle: TextStyle(fontSize: 10),
-            selectedLabelStyle: TextStyle(fontSize: 10),
+            unselectedLabelStyle: h7(color: gray300),
+            selectedLabelStyle: h7(color: Colors.red, bold: true),
             // 탭 애니메이션 변경 (fixed: 없음)
             type: BottomNavigationBarType.fixed,
 
@@ -53,7 +55,7 @@ class TabPage extends GetView<MainTabController> {
                       : SvgPicture.asset(
                           'assets/icons/ic_card.svg',
                         ),
-                  label: "tap1"),
+                  label: "자산"),
               BottomNavigationBarItem(
                   icon: controller.selectedIndex.value == 1
                       ? SvgPicture.asset(
@@ -62,7 +64,7 @@ class TabPage extends GetView<MainTabController> {
                       : SvgPicture.asset(
                           'assets/icons/ic_sign.svg',
                         ),
-                  label: "tap2"),
+                  label: "수익"),
               BottomNavigationBarItem(
                   icon: controller.selectedIndex.value == 2
                       ? SvgPicture.asset(
@@ -71,7 +73,7 @@ class TabPage extends GetView<MainTabController> {
                       : SvgPicture.asset(
                           'assets/icons/ic_gear.svg',
                         ),
-                  label: "tap3"),
+                  label: "설정"),
             ],
           )),
     );
