@@ -20,131 +20,133 @@ class SettingPage extends GetView<AuthService> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            top: 32,
-            left: 16,
-            right: 16,
-            bottom: 16,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 32,
+              left: 16,
+              right: 16,
+              bottom: 16,
+            ),
+            child: SizedBox(
+              height: 32,
+              child: Text('설정', style: h2(bold: true, color: gray900)),
+            ),
           ),
-          child: SizedBox(
-            height: 32,
-            child: Text('설정', style: h2(bold: true, color: gray900)),
+          const SizedBox(
+            height: 16,
           ),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
-          ),
-          child: Obx(
-            () => _auth.isGuest.isFalse
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 32),
-                    child: Wrap(
-                      crossAxisAlignment: WrapCrossAlignment.start,
-                      runSpacing: 12,
-                      children: [
-                        const Text('계정 목록'),
-                        Wrap(
-                          crossAxisAlignment: WrapCrossAlignment.start,
-                          runSpacing: 12,
-                          children: controller.tokens
-                              .map((d) => accountItem(d, controller))
-                              .toList(),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            Get.toNamed('/login');
-                          },
-                          child: Container(
-                            height: 28,
-                            alignment: Alignment.centerLeft,
-                            padding: const EdgeInsets.symmetric(horizontal: 12),
-                            child: Text(
-                              '계정 추가 >',
-                              style: label3(color: newDeepBlue),
-                            ),
-                          ),
-                        )
-                      ],
-                    ))
-                : Container(),
-          ),
-        ),
-        const Divider(
-          height: 32,
-          thickness: 8,
-          color: warmGray50,
-        ),
-        Container(
+          Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16,
             ),
-            child: Button(
-              color: const Color(0xFFFAE300),
-              child: Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                spacing: 4,
-                children: [
-                  SvgPicture.asset('assets/icons/ic_kakaro.svg'),
-                  Text('카카오톡 상담하기', style: label2(color: Colors.black))
-                ],
+            child: Obx(
+              () => _auth.isGuest.isFalse
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 32),
+                      child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.start,
+                        runSpacing: 12,
+                        children: [
+                          const Text('계정 목록'),
+                          Wrap(
+                            crossAxisAlignment: WrapCrossAlignment.start,
+                            runSpacing: 12,
+                            children: controller.tokens
+                                .map((d) => accountItem(d, controller))
+                                .toList(),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Get.toNamed('/login');
+                            },
+                            child: Container(
+                              height: 28,
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              child: Text(
+                                '계정 추가 >',
+                                style: label3(color: newDeepBlue),
+                              ),
+                            ),
+                          )
+                        ],
+                      ))
+                  : Container(),
+            ),
+          ),
+          const Divider(
+            height: 32,
+            thickness: 8,
+            color: warmGray50,
+          ),
+          Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
               ),
-            )),
-        const Divider(
-          height: 32,
-          thickness: 8,
-          color: warmGray50,
-        ),
-        Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                ListTile(
-                  onTap: () {},
-                  title: Text('이용약관', style: h3()),
+              child: Button(
+                color: const Color(0xFFFAE300),
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 4,
+                  children: [
+                    SvgPicture.asset('assets/icons/ic_kakaro.svg'),
+                    Text('카카오톡 상담하기', style: label2(color: Colors.black))
+                  ],
                 ),
-                Divider(),
-                ListTile(
-                  onTap: () {
+              )),
+          const Divider(
+            height: 32,
+            thickness: 8,
+            color: warmGray50,
+          ),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  ListTile(
+                    onTap: () {},
+                    title: Text('이용약관', style: h3()),
+                  ),
+                  Divider(),
+                  ListTile(
+                    onTap: () {
 
-                    if(_auth.isGuest.isTrue){
-                      Toast.warn('둘러보기 사용자는 비밀번호를 변경할 수 없습니다.');
-                    }
-                    else{
-                      Get.bottomSheet(PasswordChangeBottomSheet());
-                    }
+                      if(_auth.isGuest.isTrue){
+                        Toast.warn('둘러보기 사용자는 비밀번호를 변경할 수 없습니다.');
+                      }
+                      else{
+                        Get.bottomSheet(PasswordChangeBottomSheet());
+                      }
 
-                  },
-                  title: Text('비밀번호 변경', style: h3()),
-                ),
-                Divider(),
-                ListTile(
-                  onTap: () {
-                    Get.defaultDialog(
-                      title: _auth.isGuest.isTrue  ? '둘러보기 종료' :'모든 계정 로그아웃',
-                      content: const Text('모든 계정을 로그아웃 하시겠습니까?'),
-                      textConfirm: '로그아웃',
-                      confirmTextColor: Colors.white,
-                      textCancel: '취소',
-                      onConfirm: () {
-                        controller.logout();
-                        Get.offAllNamed('/login');
-                      },
-                      onCancel: Get.back,
-                    );
-                  },
-                  title: Text( _auth.isGuest.isTrue ? '둘러보기 종료': '모든 계정 로그아웃'),
-                ),
-              ],
-            )),
-      ],
+                    },
+                    title: Text('비밀번호 변경', style: h3()),
+                  ),
+                  Divider(),
+                  ListTile(
+                    onTap: () {
+                      Get.defaultDialog(
+                        title: _auth.isGuest.isTrue  ? '둘러보기 종료' :'모든 계정 로그아웃',
+                        content: const Text('모든 계정을 로그아웃 하시겠습니까?'),
+                        textConfirm: '로그아웃',
+                        confirmTextColor: Colors.white,
+                        textCancel: '취소',
+                        onConfirm: () {
+                          controller.logout();
+                          Get.offAllNamed('/login');
+                        },
+                        onCancel: Get.back,
+                      );
+                    },
+                    title: Text( _auth.isGuest.isTrue ? '둘러보기 종료': '모든 계정 로그아웃'),
+                  ),
+                ],
+              )),
+        ],
+      ),
     );
 
     // Button(

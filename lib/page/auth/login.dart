@@ -22,112 +22,140 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Material(
-        child: Form(
-          key: _formKey,
-          child: Container(
-            color: Colors.white,
-            child: SafeArea(
+    bool isKeyboard = MediaQuery.of(context).viewInsets.bottom != 0;
+    return Stack(
+      children: [
+        Scaffold(
+          body: Material(
+            child: SingleChildScrollView(
               child: Column(
-                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Container(
-                      alignment: Alignment.center,
-                      height: 280,
-                      child: SvgPicture.asset('assets/images/login-logo.svg')),
-                  Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 28),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          TextFormField(
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            onSaved: (value) {
-                              _id = value as String;
-                            },
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '필수 입력';
-                              }
-                              return null;
-                            },
-                            decoration: const InputDecoration(
-                              fillColor: warmGray50,
-                              filled: true,
-                              border: OutlineInputBorder(),
-                              hintText: '아이디',
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              onSaved: (value) {
-                                _password = value as String;
-                              },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return '필수 입력';
-                                }
-                                return null;
-                              },
-                              obscureText: true,
-                              decoration: const InputDecoration(
-                                fillColor: warmGray50,
-                                filled: true,
-                                border: OutlineInputBorder(),
-                                hintText: '비밀번호',
-                              )),
-                          const SizedBox(height: 27),
-                          Button(
-                            onPressed: () async {
-                              final authService = Get.find<AuthService>();
-                              try {
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
-                                }
-                                await authService.login(
-                                    id: _id, password: _password);
+                  Form(
+                    key: _formKey,
+                    child: Container(
+                      color: Colors.white,
+                      child: SafeArea(
+                        child: Column(
+                          children: [
+                            Container(
+                                alignment: Alignment.center,
+                                height: 280,
+                                child: SvgPicture.asset(
+                                    'assets/images/login-logo.svg')),
+                            Container(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 28),
+                                child: Column(
+                                  children: [
+                                    TextFormField(
+                                      autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                      onSaved: (value) {
+                                        _id = value as String;
+                                      },
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return '필수 입력';
+                                        }
+                                        return null;
+                                      },
+                                      decoration: const InputDecoration(
+                                        fillColor: warmGray50,
+                                        filled: true,
+                                        border: OutlineInputBorder(),
+                                        hintText: '아이디',
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    TextFormField(
+                                        autovalidateMode:
+                                            AutovalidateMode.onUserInteraction,
+                                        onSaved: (value) {
+                                          _password = value as String;
+                                        },
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return '필수 입력';
+                                          }
+                                          return null;
+                                        },
+                                        obscureText: true,
+                                        decoration: const InputDecoration(
+                                          fillColor: warmGray50,
+                                          filled: true,
+                                          border: OutlineInputBorder(),
+                                          hintText: '비밀번호',
+                                        )),
+                                    const SizedBox(height: 27),
+                                    Button(
+                                      onPressed: () async {
+                                        final authService =
+                                            Get.find<AuthService>();
+                                        try {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            _formKey.currentState!.save();
+                                          }
+                                          await authService.login(
+                                              id: _id, password: _password);
 
-                                Get.offAllNamed('/tab');
-                              } catch (e) {
-                                Flushbar(
-                                  message: "로그인 실패 \n ${e.toString()}",
-                                  duration: const Duration(seconds: 3),
-                                  backgroundColor: hot,
-                                  flushbarPosition: FlushbarPosition.TOP,
-                                  isDismissible: true,
-                                ).show(Get.context!);
-                              }
-                            },
-                            child: Text(
-                              '로그인',
-                              style: label2(color: Colors.white),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 28,
-                          ),
-                          Navigator.of(context).canPop()
-                              ? Container()
-                              : InkWell(
-                                  onTap: () {
-                                    final authService = Get.find<AuthService>();
-                                    authService.guestLogin();
-                                    Get.offAllNamed('/tab');
-                                  },
-                                  child: Text(
-                                    '로그인 하지 않고 둘러보기 >',
-                                    style: label3(color: deepBlue)
-                                        .copyWith(fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                        ],
-                      )),
-                  Expanded(
+                                          Get.offAllNamed('/tab');
+                                        } catch (e) {
+                                          Flushbar(
+                                            message:
+                                                "로그인 실패 \n ${e.toString()}",
+                                            duration:
+                                                const Duration(seconds: 3),
+                                            backgroundColor: hot,
+                                            flushbarPosition:
+                                                FlushbarPosition.TOP,
+                                            isDismissible: true,
+                                          ).show(Get.context!);
+                                        }
+                                      },
+                                      child: Text(
+                                        '로그인',
+                                        style: label2(color: Colors.white),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 28,
+                                    ),
+                                    Navigator.of(context).canPop()
+                                        ? Container()
+                                        : InkWell(
+                                            onTap: () {
+                                              final authService =
+                                                  Get.find<AuthService>();
+                                              authService.guestLogin();
+                                              Get.offAllNamed('/tab');
+                                            },
+                                            child: Text(
+                                              '로그인 하지 않고 둘러보기 >',
+                                              style: label3(color: deepBlue)
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w500),
+                                            ),
+                                          ),
+                                  ],
+                                )),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          child: !isKeyboard
+              ? SafeArea(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -158,12 +186,10 @@ class LoginPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+                )
+              : Container(),
+        )
+      ],
     );
   }
 }
