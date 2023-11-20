@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -7,18 +7,30 @@ import 'package:invesotr_soop/component/color.dart';
 import 'package:invesotr_soop/component/typograph.dart';
 import 'package:get/get.dart';
 import 'package:invesotr_soop/controller/tab_controller.dart';
+import 'package:invesotr_soop/page/auth/@code.dart';
 import 'package:invesotr_soop/services/auth_service.dart';
 import 'package:invesotr_soop/page/tab/tab.dart';
+import 'package:invesotr_soop/services/env_service.dart';
 import 'package:toastify/toastify.dart';
 import 'package:another_flushbar/flushbar.dart';
 
 final _formKey = GlobalKey<FormState>();
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   String _id = '';
+
   String _password = '';
+
+  bool isLongPressing = false;
+
+  bool envMode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +49,40 @@ class LoginPage extends StatelessWidget {
                       child: SafeArea(
                         child: Column(
                           children: [
-                            Container(
-                                alignment: Alignment.center,
-                                height: 280,
-                                child: SvgPicture.asset(
-                                    'assets/images/login-logo.svg')),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  envMode = false;
+                                });
+                              },
+                              onLongPressStart: (details) {
+                                startLongPressTimer();
+                              },
+                              onLongPressEnd: (details) {
+                                stopLongPressTimer();
+                              },
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  height: 280,
+                                  child: Transform.rotate(
+                                    angle: (360 / (envMode ? 2 : 1)) *
+                                        math.pi /
+                                        180,
+                                    child: SvgPicture.asset(
+                                        'assets/images/login-logo.svg'),
+                                  )),
+                            ),
+                            Get.find<EnvService>().isProd.isTrue
+                                ? Container()
+                                : InkWell(
+                                    onTap: () {
+                                      Get.dialog(CodeInputDialog());
+                                    },
+                                    child: Text(
+                                      'group code : ${Get.find<EnvService>().companyGroupCode.toString().toUpperCase()}',
+                                      style: h2(color: Colors.blue),
+                                    ),
+                                  ),
                             Container(
                                 margin:
                                     const EdgeInsets.symmetric(horizontal: 28),
@@ -125,10 +166,21 @@ class LoginPage extends StatelessWidget {
                                         ? Container()
                                         : InkWell(
                                             onTap: () {
-                                              final authService =
-                                                  Get.find<AuthService>();
-                                              authService.guestLogin();
-                                              Get.offAllNamed('/tab');
+                                              if (!envMode) {
+                                                final authService =
+                                                    Get.find<AuthService>();
+                                                authService.guestLogin();
+                                                Get.offAllNamed('/tab');
+                                              } else {
+                                                EnvService env =
+                                                    Get.find<EnvService>();
+
+                                                if (env.isProd.isTrue) {
+                                                  env.devMode();
+                                                } else {
+                                                  env.prodMode();
+                                                }
+                                              }
                                             },
                                             child: Text(
                                               '로그인 하지 않고 둘러보기 >',
@@ -191,5 +243,22 @@ class LoginPage extends StatelessWidget {
         )
       ],
     );
+  }
+
+  void startLongPressTimer() {
+    isLongPressing = true;
+    print('start');
+    Future.delayed(Duration(seconds: 10), () {
+      if (isLongPressing) {
+        setState(() {
+          envMode = true;
+        });
+        // 여기에서 원하는 작업을 수행
+      }
+    });
+  }
+
+  void stopLongPressTimer() {
+    isLongPressing = false;
   }
 }
