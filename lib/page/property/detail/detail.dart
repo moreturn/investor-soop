@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:invesotr_soop/component/button.dart';
-import 'package:invesotr_soop/component/color.dart';
-import 'package:invesotr_soop/component/typograph.dart';
-import 'package:invesotr_soop/model/property.dart';
-import 'package:invesotr_soop/util/extension.dart';
-import 'package:invesotr_soop/util/toast.dart';
+import 'package:investor_soop/component/button.dart';
+import 'package:investor_soop/component/color.dart';
+import 'package:investor_soop/component/typograph.dart';
+import 'package:investor_soop/model/property.dart';
+import 'package:investor_soop/util/extension.dart';
+import 'package:investor_soop/util/toast.dart';
 import 'package:intl/intl.dart';
-
 
 class DetailPage extends StatelessWidget {
   final controller;
@@ -162,7 +161,9 @@ class PropertyTile extends StatelessWidget {
                         const SizedBox(width: 16),
                         Flexible(
                           child: Text(
-                            DateFormat.yMMMd().format(proceedProperty.executeDate),
+                            DateFormat.yMMMd('ko_KR').format(
+                              proceedProperty.executeDate,
+                            ),
                             textAlign: TextAlign.end,
                             style: h6(color: Colors.black87),
                           ),
@@ -180,7 +181,8 @@ class PropertyTile extends StatelessWidget {
                         const SizedBox(width: 16),
                         Flexible(
                           child: Text(
-                            DateFormat.yMMMd().format(proceedProperty.expireDate),
+                            DateFormat.yMMMd()
+                                .format(proceedProperty.expireDate),
                             textAlign: TextAlign.end,
                             style: h6(color: Colors.black87),
                           ),
@@ -245,92 +247,94 @@ class PropertyTile extends StatelessWidget {
                       ],
                     ),
                     Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '월 실수령',
+                          style: h6(color: gray300),
+                        ),
+                        const SizedBox(width: 16),
+                        Flexible(
+                          child: Text(
+                            '${(proceedProperty.regularInterest - (proceedProperty.regularInterest * (proceedProperty.tax / 100)).toInt()).setComma()}원',
+                            textAlign: TextAlign.end,
+                            style: h6(color: Colors.black87, bold: true),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Get.arguments['type'] == 'COLLATERAL'
+                        ? Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Text(
-                                '월 실수령',
-                                style: h6(color: gray300),
-                              ),
-                              const SizedBox(width: 16),
                               Flexible(
-                                child: Text(
-                                  '${(proceedProperty.regularInterest - (proceedProperty.regularInterest * (proceedProperty.tax / 100)).toInt()).setComma()}원',
-                                  textAlign: TextAlign.end,
-                                  style: h6(color: Colors.black87, bold: true),
+                                child: Button(
+                                  onPressed: () {
+                                    Toast.warn('준비중');
+                                  },
+                                  width: double.infinity,
+                                  color: warmGray50,
+                                  borderColor: gray300,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '물건 안내서',
+                                        style: label3(color: gray300).copyWith(
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      const SizedBox(
+                                        width: 4,
+                                      ),
+                                      const Icon(
+                                        Icons.description_outlined,
+                                        color: gray300,
+                                        size: 16,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 16,
+                              ),
+                              Flexible(
+                                child: Button(
+                                  onPressed: () {
+                                    Toast.warn('준비중');
+                                  },
+                                  width: double.infinity,
+                                  color: warmGray50,
+                                  borderColor: gray300,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '심사 보고서',
+                                        style: label3(color: gray300).copyWith(
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      const SizedBox(
+                                        width: 4,
+                                      ),
+                                      const Icon(
+                                        Icons.description_outlined,
+                                        color: gray300,
+                                        size: 16,
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
                           )
-                        ,
-                    Get.arguments['type'] == 'COLLATERAL'
-                        ? Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Flexible(
-                          child: Button(
-                            onPressed: () {
-                              Toast.warn('준비중');
-                            },
-                            width: double.infinity,
-                            color: warmGray50,
-                            borderColor: gray300,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '물건 안내서',
-                                  style: label3(color: gray300)
-                                      .copyWith(fontWeight: FontWeight.w500),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                const Icon(
-                                  Icons.description_outlined,
-                                  color: gray300,
-                                  size: 16,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        Flexible(
-                          child: Button(
-                            onPressed: () {
-                              Toast.warn('준비중');
-                            },
-                            width: double.infinity,
-                            color: warmGray50,
-                            borderColor: gray300,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '심사 보고서',
-                                  style: label3(color: gray300)
-                                      .copyWith(fontWeight: FontWeight.w500),
-                                ),
-                                const SizedBox(
-                                  width: 4,
-                                ),
-                                const Icon(
-                                  Icons.description_outlined,
-                                  color: gray300,
-                                  size: 16,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ) : Container()
+                        : Container()
                   ],
                 ),
               ),

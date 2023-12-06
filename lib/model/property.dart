@@ -30,17 +30,11 @@ class FetchedPropertyValue {
     try {
       lastMonthCollateral = int.parse(
           (data['collateral'] as Map).entries.lastOrNull?.value ?? '0');
-    } catch (e) {
-
-
-    }
+    } catch (e) {}
     try {
       lastMonthCredit =
           int.parse((data['credit'] as Map).entries.lastOrNull?.value ?? '0');
-    } catch (e) {
-
-
-    }
+    } catch (e) {}
 
     lastMonth = lastMonthCredit + lastMonthCollateral;
     //
@@ -182,8 +176,8 @@ class ProceedProperty {
     try {
       companyName = json['companyName'];
       address = json['address'];
-      executeDate = DateTime.parse(json['executeDate']);
-      expireDate = DateTime.parse(json['expireDate']);
+      executeDate = DateTime.parse(json['executeDate']).toLocal();
+      expireDate = DateTime.parse(json['expireDate']).toLocal();
       interestRate = double.parse(json['interestRate'].toString());
       amount = json['amount'];
       currency = json['currency'];
@@ -193,9 +187,7 @@ class ProceedProperty {
       tax = double.parse(json['tax'].toString());
       balance = json['balance'];
       interestPaymentType = json['interestPaymentType'];
-    } catch (e) {
-
-    }
+    } catch (e) {}
   }
 
   Map<String, dynamic> toJson() {

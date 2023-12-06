@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:invesotr_soop/component/color.dart';
-import 'package:invesotr_soop/component/skeleton.dart';
-import 'package:invesotr_soop/component/typograph.dart';
-import 'package:invesotr_soop/model/property.dart';
-import 'package:invesotr_soop/page/property/@bottom_sheet.dart';
-import 'package:invesotr_soop/page/property/controller/property_controller.dart';
-import 'package:invesotr_soop/services/auth_service.dart';
-import 'package:invesotr_soop/util/extension.dart';
-import 'package:invesotr_soop/util/numberToKor.dart';
+import 'package:investor_soop/component/color.dart';
+import 'package:investor_soop/component/skeleton.dart';
+import 'package:investor_soop/component/typograph.dart';
+import 'package:investor_soop/model/property.dart';
+import 'package:investor_soop/page/property/@bottom_sheet.dart';
+import 'package:investor_soop/page/property/controller/property_controller.dart';
+import 'package:investor_soop/services/auth_service.dart';
+import 'package:investor_soop/util/extension.dart';
+import 'package:investor_soop/util/numberToKor.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class PropertyPage extends GetView<PropertyController> {
@@ -63,14 +63,16 @@ class PropertyPage extends GetView<PropertyController> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Get.bottomSheet(
-                                Obx((){
-                                  print(controller.showType);
-                                  return PropertyBottomSheet(
-                                    controller,
-                                    controller.selector(query.data!.lastMonth, query.data!.lastMonthCollateral, query.data!.lastMonthCredit),
-                                  );
-                                }),
+                            Get.bottomSheet(Obx(() {
+                              print(controller.showType);
+                              return PropertyBottomSheet(
+                                controller,
+                                controller.selector(
+                                    query.data!.lastMonth,
+                                    query.data!.lastMonthCollateral,
+                                    query.data!.lastMonthCredit),
+                              );
+                            }),
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(20),
@@ -389,7 +391,7 @@ class PropertyPage extends GetView<PropertyController> {
                                   isVisible: true,
                                   axisLabelFormatter: (s) {
                                     return ChartAxisLabel(
-                                        '${s.text.substring(4, 6)}월',
+                                        '${s.text.substring(0,4)}년\n${s.text.substring(4, 6)}월',
                                         label3(color: deepBlue));
                                   },
                                   majorGridLines:

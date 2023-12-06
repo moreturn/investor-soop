@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:invesotr_soop/model/income.dart';
-import 'package:invesotr_soop/model/property.dart';
-import 'package:invesotr_soop/services/auth_service.dart';
-import 'package:invesotr_soop/services/http_service.dart';
+import 'package:investor_soop/model/income.dart';
+import 'package:investor_soop/model/property.dart';
+import 'package:investor_soop/services/auth_service.dart';
+import 'package:investor_soop/services/http_service.dart';
 
 class IncomeController extends GetxController {
   final RxBool _isLoading = false.obs;

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:invesotr_soop/component/button.dart';
-import 'package:invesotr_soop/component/color.dart';
-import 'package:invesotr_soop/component/typograph.dart';
-import 'package:invesotr_soop/page/income/controller/income_controller.dart';
-import 'package:invesotr_soop/page/property/controller/property_controller.dart';
-import 'package:invesotr_soop/util/extension.dart';
+import 'package:investor_soop/component/button.dart';
+import 'package:investor_soop/component/color.dart';
+import 'package:investor_soop/component/typograph.dart';
+import 'package:investor_soop/page/income/controller/income_controller.dart';
+import 'package:investor_soop/page/property/controller/property_controller.dart';
+import 'package:investor_soop/util/extension.dart';
 
 class IncomeBottomSheet extends StatelessWidget {
   final IncomeController controller;
@@ -56,7 +56,6 @@ class IncomeBottomSheet extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-
                         controller.show({
                           "credit": controller.show["credit"] ?? false,
                           "collateral":

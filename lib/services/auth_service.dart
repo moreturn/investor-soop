@@ -4,9 +4,9 @@ import 'package:encrypt/encrypt_io.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:invesotr_soop/controller/tab_controller.dart';
-import 'package:invesotr_soop/services/env_service.dart';
-import 'package:invesotr_soop/services/http_service.dart';
+import 'package:investor_soop/controller/tab_controller.dart';
+import 'package:investor_soop/services/env_service.dart';
+import 'package:investor_soop/services/http_service.dart';
 
 import 'package:fast_rsa/fast_rsa.dart';
 
@@ -50,8 +50,6 @@ class AuthService extends GetxController {
 
   Future<bool> login({required String id, required String password}) async {
     try {
-
-
       dynamic b = await HttpService()
           .post('login', {"id": id, "password": await encrypt(password)});
 

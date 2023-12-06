@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:invesotr_soop/component/color.dart';
-import 'package:invesotr_soop/component/typograph.dart';
-import 'package:invesotr_soop/controller/tab_controller.dart';
-import 'package:invesotr_soop/navigation.dart';
-import 'package:invesotr_soop/page/income/controller/income_controller.dart';
-import 'package:invesotr_soop/page/income/income.dart';
-import 'package:invesotr_soop/page/property/controller/property_controller.dart';
-import 'package:invesotr_soop/page/property/property.dart';
+import 'package:investor_soop/component/color.dart';
+import 'package:investor_soop/component/typograph.dart';
+import 'package:investor_soop/controller/tab_controller.dart';
+import 'package:investor_soop/navigation.dart';
+import 'package:investor_soop/page/income/controller/income_controller.dart';
+import 'package:investor_soop/page/income/income.dart';
+import 'package:investor_soop/page/property/controller/property_controller.dart';
+import 'package:investor_soop/page/property/property.dart';
 
 class TabPage extends GetView<MainTabController> {
   const TabPage({Key? key}) : super(key: key);
@@ -21,10 +21,8 @@ class TabPage extends GetView<MainTabController> {
 
   @override
   Widget build(BuildContext context) {
-
     Get.lazyPut(() => IncomeController());
     Get.lazyPut(() => PropertyController());
-
 
     return Scaffold(
       body: Obx(() => SafeArea(

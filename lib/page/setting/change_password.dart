@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:invesotr_soop/component/button.dart';
-import 'package:invesotr_soop/component/color.dart';
-import 'package:invesotr_soop/component/typograph.dart';
-import 'package:invesotr_soop/services/auth_service.dart';
-import 'package:invesotr_soop/services/http_service.dart';
-import 'package:invesotr_soop/util/toast.dart';
+import 'package:investor_soop/component/button.dart';
+import 'package:investor_soop/component/color.dart';
+import 'package:investor_soop/component/typograph.dart';
+import 'package:investor_soop/services/auth_service.dart';
+import 'package:investor_soop/services/http_service.dart';
+import 'package:investor_soop/util/toast.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -167,20 +167,19 @@ class ChangePasswordPage extends GetView<AuthService> {
                 Button(
                   onPressed: () async {
                     if (_formKey.currentState?.validate() ?? false) {
-                      try{
+                      try {
                         dynamic a = await controller.passwordChange(
                             pwd: _password.value,
                             newPwd: _newPassword1.value,
                             token: token.token);
                         Get.back();
                         Toast.success('비밀번호가 변경되었습니다.');
-                      }
-                      catch(e){
+                      } catch (e) {
                         Toast.error('비밀번호 변경이 실패하였습니다.');
                       }
                     }
                   },
-                  child: Text('text'),
+                  child: Text('비밀번호 변경'),
                 ),
               ],
             ),

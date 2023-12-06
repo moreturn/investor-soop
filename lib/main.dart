@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:invesotr_soop/controller/tab_controller.dart';
-import 'package:invesotr_soop/navigation.dart';
-import 'package:invesotr_soop/page/income/controller/income_controller.dart';
-import 'package:invesotr_soop/page/property/controller/property_controller.dart';
-import 'package:invesotr_soop/services/auth_service.dart';
-import 'package:invesotr_soop/services/env_service.dart';
-import 'package:invesotr_soop/services/http_service.dart';
+import 'package:investor_soop/controller/tab_controller.dart';
+import 'package:investor_soop/navigation.dart';
+import 'package:investor_soop/page/income/controller/income_controller.dart';
+import 'package:investor_soop/page/property/controller/property_controller.dart';
+import 'package:investor_soop/services/auth_service.dart';
+import 'package:investor_soop/services/env_service.dart';
+import 'package:investor_soop/services/http_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         title: 'Investor',
         debugShowCheckedModeBanner: !env.isProd.value,
         getPages: appPages,
-        locale: Locale('ko',''),
+        locale: Locale('ko', ''),
         supportedLocales: [
           Locale('ko', ''), // Korean, no country code
         ],

@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="invesotr_soop"
-        android:name="${applicationName}"
+        android:label="investor_soop"
+        android:name="행센"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"

@@ -1,4 +1,4 @@
-package co.kr.moreturn.investor.soop.invesotr_soop
+package kr.co.moreturn.investor.soop
 
 import io.flutter.embedding.android.FlutterActivity
 

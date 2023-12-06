@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
-import 'package:invesotr_soop/middleware/AuthGuard.dart';
-import 'package:invesotr_soop/page/auth/login.dart';
-import 'package:invesotr_soop/page/income/income.dart';
-import 'package:invesotr_soop/page/property/detail/tab.dart';
-import 'package:invesotr_soop/page/property/property.dart';
-import 'package:invesotr_soop/page/setting/change_password.dart';
-import 'package:invesotr_soop/page/setting/setting.dart';
-import 'package:invesotr_soop/page/tab/tab.dart';
+import 'package:investor_soop/middleware/AuthGuard.dart';
+import 'package:investor_soop/page/auth/login.dart';
+import 'package:investor_soop/page/income/income.dart';
+import 'package:investor_soop/page/property/detail/tab.dart';
+import 'package:investor_soop/page/property/property.dart';
+import 'package:investor_soop/page/setting/change_password.dart';
+import 'package:investor_soop/page/setting/setting.dart';
+import 'package:investor_soop/page/tab/tab.dart';
 
 abstract class Routes {
   static const tab = '/tab';

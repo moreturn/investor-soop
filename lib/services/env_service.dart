@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-import 'package:invesotr_soop/services/auth_service.dart';
+import 'package:investor_soop/services/auth_service.dart';
 
 class EnvService extends GetxController {
   get serviceCode => '1';
@@ -10,8 +10,8 @@ class EnvService extends GetxController {
   get companyGroupCode => isProd.isTrue ? '28ab2275' : devGroupCode;
 
   get apiEndPoint => isProd.isFalse
-      // ? 'http://localhost:3005/investor/'
-      ? 'https://tapi.moneyparking.co.kr/investor/'
+      ? 'http://localhost:3005/investor/'
+      // ? 'https://tapi.moneyparking.co.kr/investor/'
       : 'https://api.moneyparking.co.kr/investor/';
 
   late String devGroupCode;

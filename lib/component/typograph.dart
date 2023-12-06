@@ -29,26 +29,27 @@ TextStyle h4({Color? color, bool? bold}) {
       fontSize: 16,
       fontWeight: (bold ?? false) ? FontWeight.bold : FontWeight.normal);
 }
+
 TextStyle h5({Color? color, bool? bold}) {
   return TextStyle(
       color: color ?? Colors.black87,
       fontSize: 14,
       fontWeight: (bold ?? false) ? FontWeight.bold : FontWeight.normal);
 }
+
 TextStyle h6({Color? color, bool? bold}) {
   return TextStyle(
       color: color ?? Colors.black87,
       fontSize: 13,
       fontWeight: (bold ?? false) ? FontWeight.bold : FontWeight.normal);
 }
+
 TextStyle h7({Color? color, bool? bold}) {
   return TextStyle(
       color: color ?? Colors.black87,
       fontSize: 12,
       fontWeight: (bold ?? false) ? FontWeight.bold : FontWeight.normal);
 }
-
-
 
 TextStyle body({Color? color, bool? bold}) {
   return TextStyle(
@@ -57,20 +58,19 @@ TextStyle body({Color? color, bool? bold}) {
       fontWeight: (bold ?? false) ? FontWeight.bold : FontWeight.normal);
 }
 
-
 TextStyle input({Color? color, bool? bold}) {
   return TextStyle(
       color: color ?? Colors.black87,
       fontSize: 16,
       fontWeight: (bold ?? false) ? FontWeight.bold : FontWeight.normal);
 }
+
 TextStyle caption({Color? color, bool? bold}) {
   return TextStyle(
       color: color ?? Colors.black87,
       fontSize: 14,
       fontWeight: (bold ?? false) ? FontWeight.bold : FontWeight.normal);
 }
-
 
 TextStyle label1({Color? color, bool? bold}) {
   return TextStyle(
@@ -79,15 +79,14 @@ TextStyle label1({Color? color, bool? bold}) {
       fontWeight: (bold ?? false) ? FontWeight.bold : FontWeight.w500);
 }
 
-
 TextStyle label2({Color? color, bool? bold}) {
   return TextStyle(
       color: color ?? Colors.black87,
       fontSize: 16,
       fontWeight: (bold ?? false) ? FontWeight.bold : FontWeight.w500);
 }
-TextStyle label3({Color? color, bool? bold}) {
 
+TextStyle label3({Color? color, bool? bold}) {
   return TextStyle(
       color: color ?? Colors.black87,
       fontSize: 14,
@@ -95,7 +94,6 @@ TextStyle label3({Color? color, bool? bold}) {
 }
 
 TextStyle label4({Color? color, bool? bold}) {
-
   return TextStyle(
       color: color ?? Colors.black87,
       fontSize: 11,

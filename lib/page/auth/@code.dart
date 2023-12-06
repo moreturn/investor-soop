@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:invesotr_soop/services/env_service.dart';
+import 'package:investor_soop/services/env_service.dart';
 import 'package:get/get.dart';
 
 class CodeInputDialog extends StatefulWidget {
@@ -33,10 +33,11 @@ class _CodeInputDialogState extends State<CodeInputDialog> {
                     code = value;
                   },
                 ),
-                ElevatedButton(onPressed: () {
-
-                  Get.find<EnvService>().setDevGroupCode(code);
-                }, child: Text('확인'))
+                ElevatedButton(
+                    onPressed: () {
+                      Get.find<EnvService>().setDevGroupCode(code);
+                    },
+                    child: Text('확인'))
               ],
             ),
           ),

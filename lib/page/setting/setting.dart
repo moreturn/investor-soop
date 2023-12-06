@@ -3,14 +3,14 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:invesotr_soop/component/button.dart';
-import 'package:invesotr_soop/component/color.dart';
-import 'package:invesotr_soop/component/typograph.dart';
-import 'package:invesotr_soop/page/setting/@bottom_sheet.dart';
-import 'package:invesotr_soop/services/auth_service.dart';
+import 'package:investor_soop/component/button.dart';
+import 'package:investor_soop/component/color.dart';
+import 'package:investor_soop/component/typograph.dart';
+import 'package:investor_soop/page/setting/@bottom_sheet.dart';
+import 'package:investor_soop/services/auth_service.dart';
 import 'package:get/get.dart';
-import 'package:invesotr_soop/services/env_service.dart';
-import 'package:invesotr_soop/util/toast.dart';
+import 'package:investor_soop/services/env_service.dart';
+import 'package:investor_soop/util/toast.dart';
 
 class SettingPage extends GetView<AuthService> {
   SettingPage({super.key});
@@ -66,7 +66,8 @@ class SettingPage extends GetView<AuthService> {
                             child: Container(
                               height: 28,
                               alignment: Alignment.centerLeft,
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               child: Text(
                                 '계정 추가 >',
                                 style: label3(color: newDeepBlue),
@@ -114,14 +115,11 @@ class SettingPage extends GetView<AuthService> {
                   Divider(),
                   ListTile(
                     onTap: () {
-
-                      if(_auth.isGuest.isTrue){
+                      if (_auth.isGuest.isTrue) {
                         Toast.warn('둘러보기 사용자는 비밀번호를 변경할 수 없습니다.');
-                      }
-                      else{
+                      } else {
                         Get.bottomSheet(PasswordChangeBottomSheet());
                       }
-
                     },
                     title: Text('비밀번호 변경', style: h3()),
                   ),
@@ -129,7 +127,7 @@ class SettingPage extends GetView<AuthService> {
                   ListTile(
                     onTap: () {
                       Get.defaultDialog(
-                        title: _auth.isGuest.isTrue  ? '둘러보기 종료' :'모든 계정 로그아웃',
+                        title: _auth.isGuest.isTrue ? '둘러보기 종료' : '모든 계정 로그아웃',
                         content: const Text('모든 계정을 로그아웃 하시겠습니까?'),
                         textConfirm: '로그아웃',
                         confirmTextColor: Colors.white,
@@ -141,7 +139,8 @@ class SettingPage extends GetView<AuthService> {
                         onCancel: Get.back,
                       );
                     },
-                    title: Text( _auth.isGuest.isTrue ? '둘러보기 종료': '모든 계정 로그아웃'),
+                    title:
+                        Text(_auth.isGuest.isTrue ? '둘러보기 종료' : '모든 계정 로그아웃'),
                   ),
                 ],
               )),

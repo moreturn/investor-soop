@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:invesotr_soop/model/property.dart';
-import 'package:invesotr_soop/services/auth_service.dart';
-import 'package:invesotr_soop/services/http_service.dart';
+import 'package:investor_soop/model/property.dart';
+import 'package:investor_soop/services/auth_service.dart';
+import 'package:investor_soop/services/http_service.dart';
 
 class PropertyController extends GetxController {
   final RxBool _isLoading = false.obs;

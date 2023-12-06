@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:invesotr_soop/component/button.dart';
-import 'package:invesotr_soop/component/color.dart';
-import 'package:invesotr_soop/component/typograph.dart';
-import 'package:invesotr_soop/page/property/controller/property_controller.dart';
-import 'package:invesotr_soop/services/auth_service.dart';
-import 'package:invesotr_soop/util/extension.dart';
+import 'package:investor_soop/component/button.dart';
+import 'package:investor_soop/component/color.dart';
+import 'package:investor_soop/component/typograph.dart';
+import 'package:investor_soop/page/property/controller/property_controller.dart';
+import 'package:investor_soop/services/auth_service.dart';
+import 'package:investor_soop/util/extension.dart';
 
 class PasswordChangeBottomSheet extends StatelessWidget {
   final AuthService controller = Get.find<AuthService>();
@@ -27,23 +27,25 @@ class PasswordChangeBottomSheet extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(20),
               alignment: Alignment.center,
-              child: Text('비밀번호를 변경할 계정을 선택해 주세요.', style: h3(color: Colors.black, bold: true)),
+              child: Text('비밀번호를 변경할 계정을 선택해 주세요.',
+                  style: h3(color: Colors.black, bold: true)),
             ),
             ListView.separated(
               itemCount: controller.tokens.length,
               itemBuilder: (c, i) {
                 return ListTile(
-                  onTap: (){
-
+                  onTap: () {
                     Get.back();
                     Get.toNamed('/change_password',
-                        arguments: {
-                          "token" : controller.tokens[i]
-                        });
+                        arguments: {"token": controller.tokens[i]});
                   },
                   title: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(controller.tokens[i].id, style: h3(color: gray800).copyWith(fontWeight: FontWeight.w500),),
+                    child: Text(
+                      controller.tokens[i].id,
+                      style: h3(color: gray800)
+                          .copyWith(fontWeight: FontWeight.w500),
+                    ),
                   ),
                   trailing: Icon(Icons.arrow_forward_ios_outlined),
                 );

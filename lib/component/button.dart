@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:invesotr_soop/component/color.dart';
+import 'package:investor_soop/component/color.dart';
 
 class Button extends StatelessWidget {
   final double? width;
@@ -9,7 +9,12 @@ class Button extends StatelessWidget {
   final Color? borderColor;
 
   Button(
-      {Key? key, required this.child, this.width, this.color, this.onPressed, this.borderColor})
+      {Key? key,
+      required this.child,
+      this.width,
+      this.color,
+      this.onPressed,
+      this.borderColor})
       : super(key: key);
 
   @override
@@ -21,8 +26,9 @@ class Button extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: color ?? deepBlue,
           shadowColor: Colors.transparent,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10),side: BorderSide(color: borderColor ?? color ?? deepBlue)),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              side: BorderSide(color: borderColor ?? color ?? deepBlue)),
         ),
         onPressed: () async {
           onPressed?.call();

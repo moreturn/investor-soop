@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:invesotr_soop/navigation.dart';
-import 'package:invesotr_soop/services/auth_service.dart';
+import 'package:investor_soop/navigation.dart';
+import 'package:investor_soop/services/auth_service.dart';
 
 class AuthGuard extends GetMiddleware {
   final authService = Get.find<AuthService>();

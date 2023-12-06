@@ -2,15 +2,15 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:invesotr_soop/component/button.dart';
-import 'package:invesotr_soop/component/color.dart';
-import 'package:invesotr_soop/component/typograph.dart';
+import 'package:investor_soop/component/button.dart';
+import 'package:investor_soop/component/color.dart';
+import 'package:investor_soop/component/typograph.dart';
 import 'package:get/get.dart';
-import 'package:invesotr_soop/controller/tab_controller.dart';
-import 'package:invesotr_soop/page/auth/@code.dart';
-import 'package:invesotr_soop/services/auth_service.dart';
-import 'package:invesotr_soop/page/tab/tab.dart';
-import 'package:invesotr_soop/services/env_service.dart';
+import 'package:investor_soop/controller/tab_controller.dart';
+import 'package:investor_soop/page/auth/@code.dart';
+import 'package:investor_soop/services/auth_service.dart';
+import 'package:investor_soop/page/tab/tab.dart';
+import 'package:investor_soop/services/env_service.dart';
 import 'package:toastify/toastify.dart';
 import 'package:another_flushbar/flushbar.dart';
 

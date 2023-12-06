@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:invesotr_soop/component/typograph.dart';
-import 'package:invesotr_soop/page/property/controller/end_scroll_controller.dart';
-import 'package:invesotr_soop/page/property/controller/proceed_scroll_controller.dart';
-import 'package:invesotr_soop/page/property/detail/detail.dart';
+import 'package:investor_soop/component/typograph.dart';
+import 'package:investor_soop/page/property/controller/end_scroll_controller.dart';
+import 'package:investor_soop/page/property/controller/proceed_scroll_controller.dart';
+import 'package:investor_soop/page/property/detail/detail.dart';
 
 class PropertyDetailTab extends StatelessWidget {
   const PropertyDetailTab({super.key});
@@ -33,8 +33,14 @@ class PropertyDetailTab extends StatelessWidget {
           ),
         ),
         body: TabBarView(children: [
-          DetailPage(key: GlobalKey(),controller : Get.put(ProceedScrollController(type: Get.arguments['type']))),
-          DetailPage(key: GlobalKey(),controller : Get.put(EndScrollController(type:  Get.arguments['type']))),
+          DetailPage(
+              key: GlobalKey(),
+              controller: Get.put(
+                  ProceedScrollController(type: Get.arguments['type']))),
+          DetailPage(
+              key: GlobalKey(),
+              controller:
+                  Get.put(EndScrollController(type: Get.arguments['type']))),
         ]),
       ),
     );

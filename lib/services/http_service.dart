@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:invesotr_soop/services/auth_service.dart';
-import 'package:invesotr_soop/services/env_service.dart';
+import 'package:investor_soop/services/auth_service.dart';
+import 'package:investor_soop/services/env_service.dart';
 
 class HttpService extends GetxController {
   Future<HttpService> init() async => this;

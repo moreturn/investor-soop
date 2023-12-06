@@ -1,6 +1,5 @@
 String numberToKor(String arg,
     {bool isAll = true, String suffix = '', bool isNum = true}) {
-
   if (arg == '0') {
     return '0$suffix';
   }
@@ -56,16 +55,12 @@ String numberToKor(String arg,
     len = num.length;
     List<String> pairs = List.generate(
       len ~/ 4,
-          (i) => num.substring(i * 4, (i + 1) * 4),
+      (i) => num.substring(i * 4, (i + 1) * 4),
     );
-
-
 
     if (isNum) {
       String ret = '';
       for (int i = 1; i <= pairs.length; i++) {
-
-
         final n = (pairs[i - 1] == '0000') ? '' : int.parse(pairs[i - 1]);
         if (n == '' || n == null) {
           continue;
@@ -95,10 +90,10 @@ String numberToKor(String arg,
         ret += '$trans${check < 0 || trans == '0' ? '' : bigUnits[check]} ';
       }
       return (ret
-          .replaceAll(RegExp(r'억 만', caseSensitive: false), '억')
-          .replaceAll(RegExp(r'억만', caseSensitive: false), '억')
-          .replaceAll(RegExp(r'조 억', caseSensitive: false), '조')
-          .replaceAll(RegExp(r'조억', caseSensitive: false), '조')) +
+              .replaceAll(RegExp(r'억 만', caseSensitive: false), '억')
+              .replaceAll(RegExp(r'억만', caseSensitive: false), '억')
+              .replaceAll(RegExp(r'조 억', caseSensitive: false), '조')
+              .replaceAll(RegExp(r'조억', caseSensitive: false), '조')) +
           suffix;
     }
   } catch (e) {

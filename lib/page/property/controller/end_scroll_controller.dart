@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
-import 'package:invesotr_soop/model/property.dart';
-import 'package:invesotr_soop/services/auth_service.dart';
-import 'package:invesotr_soop/services/http_service.dart';
-import 'package:invesotr_soop/util/toast.dart';
+import 'package:investor_soop/model/property.dart';
+import 'package:investor_soop/services/auth_service.dart';
+import 'package:investor_soop/services/http_service.dart';
+import 'package:investor_soop/util/toast.dart';
 
 class EndScrollController extends GetxController {
   var scrollController = ScrollController().obs;
@@ -43,16 +43,13 @@ class EndScrollController extends GetxController {
   }
 
   _getData() async {
-
-    if(_authService.isGuest.isTrue){
-
+    if (_authService.isGuest.isTrue) {
       List<ProceedProperty> listData = (sample['data'] as List<dynamic>)
           .map((d) => ProceedProperty.fromJson(d))
           .toList();
       data.addAll(listData);
       hasMore.value = false;
-    }
-    else{
+    } else {
       isLoading.value = true;
       try {
         var d = (await _httpService.get<Map<String, dynamic>>(
@@ -64,16 +61,13 @@ class EndScrollController extends GetxController {
         data.addAll(listData);
         hasMore.value = data.length < d['maxCount'];
       } catch (e) {
-
         Toast.error(e.toString());
       } finally {
         isLoading.value = false;
       }
     }
-
   }
 }
-
 
 const sample = {
   "data": [

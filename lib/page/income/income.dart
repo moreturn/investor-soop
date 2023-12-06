@@ -4,17 +4,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import 'package:invesotr_soop/component/color.dart';
-import 'package:invesotr_soop/component/skeleton.dart';
-import 'package:invesotr_soop/component/typograph.dart';
-import 'package:invesotr_soop/model/income.dart';
-import 'package:invesotr_soop/model/property.dart';
-import 'package:invesotr_soop/page/income/@bottom_sheet.dart';
-import 'package:invesotr_soop/page/income/controller/income_controller.dart';
-import 'package:invesotr_soop/page/property/controller/property_controller.dart';
-import 'package:invesotr_soop/services/auth_service.dart';
-import 'package:invesotr_soop/util/extension.dart';
-import 'package:invesotr_soop/util/numberToKor.dart';
+import 'package:investor_soop/component/color.dart';
+import 'package:investor_soop/component/skeleton.dart';
+import 'package:investor_soop/component/typograph.dart';
+import 'package:investor_soop/model/income.dart';
+import 'package:investor_soop/model/property.dart';
+import 'package:investor_soop/page/income/@bottom_sheet.dart';
+import 'package:investor_soop/page/income/controller/income_controller.dart';
+import 'package:investor_soop/page/property/controller/property_controller.dart';
+import 'package:investor_soop/services/auth_service.dart';
+import 'package:investor_soop/util/extension.dart';
+import 'package:investor_soop/util/numberToKor.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class IncomePage extends StatefulWidget {
@@ -27,7 +27,7 @@ class IncomePage extends StatefulWidget {
 class _IncomePageState extends State<IncomePage> {
   final controller = Get.find<IncomeController>();
   final Rx<DateTime> start =
-      Rx(DateTime.now().subtract(const Duration(days: 30 * 3)));
+      Rx(DateTime.now().subtract(const Duration(days: 365)));
 
   @override
   void initState() {
@@ -80,12 +80,18 @@ class _IncomePageState extends State<IncomePage> {
                       children: [
                         GestureDetector(
                           onTap: () {
-
                             Get.bottomSheet(
                                 IncomeBottomSheet(
-                                    controller, controller.selector(query.data!.chartData, query.data!.collateralChartData, query.data!.creditChartData).map<int>((d) => (d.y).toInt())
-                                    .toList()
-                                    .reduceWithSeed((acc, cur) => acc + cur, 0)),
+                                    controller,
+                                    controller
+                                        .selector(
+                                            query.data!.chartData,
+                                            query.data!.collateralChartData,
+                                            query.data!.creditChartData)
+                                        .map<int>((d) => (d.y).toInt())
+                                        .toList()
+                                        .reduceWithSeed(
+                                            (acc, cur) => acc + cur, 0)),
                                 shape: const RoundedRectangleBorder(
                                   borderRadius: BorderRadius.only(
                                     topRight: Radius.circular(20),
@@ -124,9 +130,7 @@ class _IncomePageState extends State<IncomePage> {
                         )
                       : Text(
                           ''
-                          '${controller.selector(query.data!.chartData, query.data!.collateralChartData, query.data!.creditChartData).map<int>((d) => (d.y).toInt())
-                              .toList()
-                              .reduceWithSeed((acc, cur) => acc + cur, 0).toString().setComma()} 원',
+                          '${controller.selector(query.data!.chartData, query.data!.collateralChartData, query.data!.creditChartData).map<int>((d) => (d.y).toInt()).toList().reduceWithSeed((acc, cur) => acc + cur, 0).toString().setComma()} 원',
                           style: h1(bold: true, color: Colors.black)),
                   const SizedBox(
                     height: 32,
@@ -134,6 +138,9 @@ class _IncomePageState extends State<IncomePage> {
                   Text(
                     '수익 추이',
                     style: h4(color: gray900, bold: true),
+                  ),
+                  const SizedBox(
+                    height: 16,
                   ),
                   Wrap(
                     direction: Axis.horizontal,
@@ -189,6 +196,9 @@ class _IncomePageState extends State<IncomePage> {
                       ),
                     ],
                   ),
+                  const SizedBox(
+                    height: 16,
+                  ),
                   query.isLoading || query.data == null
                       ? const Skeleton(
                           width: double.infinity,
@@ -223,7 +233,7 @@ class _IncomePageState extends State<IncomePage> {
                                             query.data!.creditChartMin)
                                         .toDouble(),
                                     rangePadding: ChartRangePadding.round,
-                                    labelFormat: ' ',
+
                                     majorGridLines: const MajorGridLines(
                                         width: 1, dashArray: [3.0, 6]),
                                   ),
@@ -237,27 +247,11 @@ class _IncomePageState extends State<IncomePage> {
                                         useSeriesColor: true,
                                         labelAlignment:
                                             ChartDataLabelAlignment.bottom,
-                                        // builder: (a1, a2, a3, pointIndex, b2) {
-                                        //
-                                        //   var data = (controller.selector(
-                                        //       query.data!.chartData,
-                                        //       query.data!.collateralChartData,
-                                        //       query.data!.creditChartData));
-                                        //
-                                        //   if (pointIndex == 0 ||
-                                        //       pointIndex == (data.length - 1)) {
-                                        //     print(
-                                        //         '${pointIndex}  || ${data.length - 1}');
-                                        //
-                                        //     return Text(
-                                        //         '123');
-                                        //   } else {
-                                        //     return const Text('');
-                                        //   }
-                                        // },
                                       ),
-                                      dataLabelMapper: (d, i) {
-                                        return '${numberToKor(d.y.toInt().toString())}원';
+                                      dataLabelMapper: (d, i)
+                                      {
+
+                                        return d.y.toInt() > 0 ? '${numberToKor(d.y.toInt().toString())}원' : '';
                                       },
                                       selectionBehavior: SelectionBehavior(
                                         enable: true,
@@ -344,7 +338,7 @@ class _IncomePageState extends State<IncomePage> {
                                   isVisible: true,
                                   axisLabelFormatter: (s) {
                                     return ChartAxisLabel(
-                                        '${s.text.substring(4, 6)}월',
+                                        '${s.text.substring(0,4)}년\n${s.text.substring(4, 6)}월',
                                         label3(color: deepBlue));
                                   },
                                   majorGridLines:
@@ -369,7 +363,9 @@ class _IncomePageState extends State<IncomePage> {
                                       isVisible: true,
                                     ),
                                     dataLabelMapper: (d, i) {
-                                      return '${NumberFormat('###,###,###,###,###').format((d.y / 10000).toInt())}만원';
+
+
+                                      return (d.y / 10000).toInt() > 0 ? '${NumberFormat('###,###,###,###,###').format((d.y / 10000).toInt())}만원' : '';
                                     },
                                     selectionBehavior: SelectionBehavior(
                                       enable: true,

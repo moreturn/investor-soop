@@ -30,15 +30,11 @@ class FetchedIncomeValue {
     try {
       lastMonthCollateral = int.parse(
           (data['collateral'] as Map).entries.lastOrNull?.value ?? '0');
-    } catch (e) {
-
-    }
+    } catch (e) {}
     try {
       lastMonthCredit =
           int.parse((data['credit'] as Map).entries.lastOrNull?.value ?? '0');
-    } catch (e) {
-
-    }
+    } catch (e) {}
 
     lastMonth = lastMonthCredit + lastMonthCollateral;
 
@@ -68,7 +64,6 @@ class FetchedIncomeValue {
       return true;
     });
 
-
     int? min = null;
     int max = 0;
     chartRawData.entries.toList()
@@ -84,7 +79,6 @@ class FetchedIncomeValue {
       });
     chartMin = minCalc(min, max);
     chartMax = maxCalc(min, max);
-
 
     min = null;
     max = 0;
