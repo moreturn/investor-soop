@@ -18,3 +18,8 @@ const Color gray900 = Color(0xFF171A1C);
 const Color grayLight2 = Color(0xFFE3E5E8);
 
 const Color hot = Color(0xffFF1F47);
+
+
+const green01 = Color(0xff3AB072);
+const mint01 = Color(0xff00DFD2);
+const yellow01 = Color(0xffFFC700);

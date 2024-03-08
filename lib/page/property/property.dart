@@ -6,8 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:investor_soop/component/color.dart';
 import 'package:investor_soop/component/skeleton.dart';
 import 'package:investor_soop/component/typograph.dart';
+import 'package:investor_soop/model/chart_data.dart';
+import 'package:investor_soop/model/fetched_value.dart';
 import 'package:investor_soop/model/property.dart';
-import 'package:investor_soop/page/property/@bottom_sheet.dart';
+import 'package:investor_soop/page/@bottom_sheet.dart';
 import 'package:investor_soop/page/property/controller/property_controller.dart';
 import 'package:investor_soop/services/auth_service.dart';
 import 'package:investor_soop/util/extension.dart';
@@ -17,7 +19,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 class PropertyPage extends GetView<PropertyController> {
   PropertyPage({super.key});
 
-  Future<FetchedPropertyValue> fetch() {
+  Future<FetchedValue> fetch() {
     return controller.fetchProperty();
   }
 
@@ -37,7 +39,7 @@ class PropertyPage extends GetView<PropertyController> {
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      child: QueryBuilder<FetchedPropertyValue, dynamic>(
+      child: QueryBuilder<FetchedValue, dynamic>(
           '${Get.find<AuthService>().userId}-property-summary', () => fetch(),
           onData: (value) {
         // Map<String, int> credit = value['data']['credit'];
@@ -47,7 +49,7 @@ class PropertyPage extends GetView<PropertyController> {
         // print(query.data);
         return Obx(
           () {
-            print(controller.showType);
+            print(controller.show);
             return Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
@@ -64,13 +66,14 @@ class PropertyPage extends GetView<PropertyController> {
                         GestureDetector(
                           onTap: () {
                             Get.bottomSheet(Obx(() {
-                              print(controller.showType);
+
                               return PropertyBottomSheet(
                                 controller,
                                 controller.selector(
-                                    query.data!.lastMonth,
-                                    query.data!.lastMonthCollateral,
-                                    query.data!.lastMonthCredit),
+                                  query.data!.lastMonthCollateral,
+                                  query.data!.lastMonthCredit,
+                                  query.data!.lastMonthOther,
+                                ),
                               );
                             }),
                                 shape: const RoundedRectangleBorder(
@@ -110,7 +113,11 @@ class PropertyPage extends GetView<PropertyController> {
                           height: 40,
                         )
                       : Text(
-                          '${controller.selector(query.data!.lastMonth, query.data!.lastMonthCollateral, query.data!.lastMonthCredit).setComma()} 원',
+                          '${controller.selector(
+                                query.data!.lastMonthCollateral,
+                                query.data!.lastMonthCredit,
+                                query.data!.lastMonthOther,
+                              ).setComma()} 원',
                           style: h1(bold: true, color: Colors.black)),
                   const SizedBox(height: 16),
                   (query.isLoading || query.data == null)
@@ -118,7 +125,7 @@ class PropertyPage extends GetView<PropertyController> {
                           width: double.infinity,
                           height: 24,
                         )
-                      : controller.showType != PropertyShowType.none
+                      : (controller.show['collateral'] ?? false)
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(4),
                               child: query.data!.lastMonth == 0
@@ -131,10 +138,11 @@ class PropertyPage extends GetView<PropertyController> {
                                       backgroundColor: yellow,
                                       color: green1,
                                       value: controller.selector(
-                                          (query.data!.lastMonthCollateral /
-                                              query.data!.lastMonth),
-                                          1,
-                                          0),
+                                        (query.data!.lastMonthCollateral /
+                                            query.data!.lastMonth),
+                                        1,
+                                        0,
+                                      ),
                                       minHeight: 24,
                                     ),
                             )
@@ -147,9 +155,7 @@ class PropertyPage extends GetView<PropertyController> {
                               width: double.infinity,
                               height: 64,
                             )
-                          : controller.showType == PropertyShowType.all ||
-                                  controller.showType ==
-                                      PropertyShowType.collateral
+                          : (controller.show['collateral'] ?? false)
                               ? ClipRRect(
                                   borderRadius: BorderRadius.circular(4),
                                   child: Container(
@@ -240,13 +246,13 @@ class PropertyPage extends GetView<PropertyController> {
                                 )
                               : Container(),
                       const SizedBox(height: 8),
+
                       query.isLoading || query.data == null
                           ? const Skeleton(
                               width: double.infinity,
                               height: 64,
                             )
-                          : controller.showType == PropertyShowType.all ||
-                                  controller.showType == PropertyShowType.credit
+                          : (controller.show['credit'] ?? false)
                               ? ClipRRect(
                                   borderRadius: BorderRadius.circular(4),
                                   child: Container(
@@ -324,7 +330,7 @@ class PropertyPage extends GetView<PropertyController> {
                                             Positioned(
                                                 right: 12,
                                                 top: 0,
-                                                bottom: 0,
+                                                bottom:0,
                                                 child: SvgPicture.asset(
                                                     'assets/icons/ic_chevron_right_s.svg'))
                                           ],
@@ -334,6 +340,100 @@ class PropertyPage extends GetView<PropertyController> {
                                   ),
                                 )
                               : Container(),
+                      const SizedBox(height: 8),
+                      query.isLoading || query.data == null
+                          ? const Skeleton(
+                        width: double.infinity,
+                        height: 64,
+                      )
+                          : (controller.show['other'] ?? false)
+                          ? ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: Container(
+                          height: 64,
+                          width: double.infinity,
+                          child: Material(
+                            color: warmGray50,
+                            child: InkWell(
+                              onTap: () {
+                                Get.toNamed('/property_detail',
+                                    arguments: {"type": "OTHER"});
+                              },
+                              child: Stack(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment
+                                        .spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            margin: const EdgeInsets
+                                                .symmetric(
+                                                vertical: 16,
+                                                horizontal: 12),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius
+                                                  .circular(4),
+                                              color: mint01,
+                                            ),
+                                            width: 6,
+                                          ),
+                                          Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment
+                                                .center,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment
+                                                .start,
+                                            children: [
+                                              Text(
+                                                '벤처투자',
+                                                style: h5(
+                                                    color: gray800,
+                                                    bold: true),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding:
+                                        const EdgeInsets.only(
+                                            right: 48),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment
+                                              .center,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              '${query.data!.lastMonthOther.setComma()}원',
+                                              style: h5(
+                                                  color: gray800,
+                                                  bold: true),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Positioned(
+                                      right: 12,
+                                      top: 0,
+                                      bottom: 0,
+                                      child: SvgPicture.asset(
+                                          'assets/icons/ic_chevron_right_s.svg'))
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                          : Container(),
                     ],
                   ),
                   const SizedBox(
@@ -369,19 +469,20 @@ class PropertyPage extends GetView<PropertyController> {
                               maxWidth: MediaQuery.of(context).size.width *
                                   (controller
                                               .selector(
-                                                  query.data!.chartData,
                                                   query.data!
                                                       .collateralChartData,
-                                                  query.data!.creditChartData)
+                                                  query.data!.creditChartData,
+                                                  query.data!.otherChartData)
                                               .length <=
                                           6
                                       ? 1
                                       : controller
                                               .selector(
-                                                  query.data!.chartData,
+
                                                   query.data!
                                                       .collateralChartData,
-                                                  query.data!.creditChartData)
+                                                  query.data!.creditChartData,
+                                                  query.data!.otherChartData)
                                               .length /
                                           6),
                             ),
@@ -391,28 +492,27 @@ class PropertyPage extends GetView<PropertyController> {
                                   isVisible: true,
                                   axisLabelFormatter: (s) {
                                     return ChartAxisLabel(
-                                        '${s.text.substring(0,4)}년\n${s.text.substring(4, 6)}월',
-                                        label3(color: deepBlue));
+                                        '${s.text.substring(2, 4)}년${s.text.substring(4, 6)}월',
+                                        label4(color: deepBlue));
                                   },
                                   majorGridLines:
                                       const MajorGridLines(width: 0),
                                 ),
                                 primaryYAxis: NumericAxis(
                                   isVisible: false,
-                                  minimum: controller
-                                      .selector(
-                                          query.data!.chartMin,
-                                          query.data!.collateralChartMin,
-                                          query.data!.creditChartMin)
-                                      .toDouble(),
+                                  // minimum: controller
+                                  //     .selector(
+                                  //         query.data!.chartMin,
+                                  //         query.data!.collateralChartMin,
+                                  //         query.data!.creditChartMin)
+                                  //     .toDouble(),
                                   rangePadding: ChartRangePadding.round,
                                   majorGridLines:
                                       const MajorGridLines(width: 0),
                                 ),
                                 tooltipBehavior: _tooltip,
-                                series: <ChartSeries<PropertyChartData,
-                                    String>>[
-                                  ColumnSeries<PropertyChartData, String>(
+                                series: <ChartSeries<ChartData, String>>[
+                                  ColumnSeries<ChartData, String>(
                                     dataLabelSettings: const DataLabelSettings(
                                       isVisible: true,
                                     ),
@@ -427,13 +527,11 @@ class PropertyPage extends GetView<PropertyController> {
                                     ),
                                     spacing: 0.2,
                                     dataSource: controller.selector(
-                                        query.data!.chartData,
                                         query.data!.collateralChartData,
-                                        query.data!.creditChartData),
-                                    xValueMapper: (PropertyChartData cd, _) =>
-                                        cd.x,
-                                    yValueMapper: (PropertyChartData cd, _) =>
-                                        cd.y,
+                                        query.data!.creditChartData,
+                                        query.data!.otherChartData),
+                                    xValueMapper: (ChartData cd, _) => cd.x,
+                                    yValueMapper: (ChartData cd, _) => cd.y,
                                     borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(4),
                                         topRight: Radius.circular(4)),

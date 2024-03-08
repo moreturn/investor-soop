@@ -3,15 +3,15 @@ import 'package:get/get.dart';
 import 'package:investor_soop/component/button.dart';
 import 'package:investor_soop/component/color.dart';
 import 'package:investor_soop/component/typograph.dart';
-import 'package:investor_soop/page/income/controller/income_controller.dart';
+import 'package:investor_soop/controller/base_controller.dart';
 import 'package:investor_soop/page/property/controller/property_controller.dart';
 import 'package:investor_soop/util/extension.dart';
 
-class IncomeBottomSheet extends StatelessWidget {
-  final IncomeController controller;
+class PropertyBottomSheet extends StatelessWidget {
+  final BaseController controller;
   final int lastMonth;
 
-  const IncomeBottomSheet(
+  const PropertyBottomSheet(
     this.controller,
     this.lastMonth, {
     super.key,
@@ -22,7 +22,7 @@ class IncomeBottomSheet extends StatelessWidget {
     return SafeArea(
       child: SizedBox(
         width: MediaQuery.of(context).size.width,
-        height: 350,
+        height: 450,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +34,7 @@ class IncomeBottomSheet extends StatelessWidget {
                   child: RichText(
                       text: TextSpan(style: h2(), children: <TextSpan>[
                     TextSpan(
-                        text: '총 수익\n',
+                        text: '총 자산\n',
                         style: h5(color: Colors.black, bold: true)),
                     TextSpan(
                         text: lastMonth.setComma() + '원',
@@ -56,8 +56,10 @@ class IncomeBottomSheet extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
+
                         controller.show({
                           "credit": controller.show["credit"] ?? false,
+                          "other": controller.show["other"] ?? false,
                           "collateral":
                               !(controller.show["collateral"] ?? false)
                         });
@@ -89,6 +91,7 @@ class IncomeBottomSheet extends StatelessWidget {
                       onTap: () {
                         controller.show({
                           "credit": !(controller.show["credit"] ?? false),
+                          "other": controller.show["other"] ?? false,
                           "collateral": controller.show["collateral"] ?? false
                         });
                       },
@@ -107,6 +110,37 @@ class IncomeBottomSheet extends StatelessWidget {
                             ),
                             (controller.show['credit'] ?? false)
                                 ? Icon(
+                              Icons.done,
+                            )
+                                : Container(),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Divider(),
+                    InkWell(
+                      onTap: () {
+                        controller.show({
+                          "credit": controller.show["credit"] ?? false,
+                          "collateral": controller.show["collateral"] ?? false,
+                          "other": !(controller.show["other"] ?? false)
+                        });
+                      },
+                      child: Container(
+                        height: 56,
+                        width: double.infinity,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              '벤처투자',
+                              style: h3().copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black),
+                            ),
+                            (controller.show['other'] ?? false)
+                                ? Icon(
                                     Icons.done,
                                   )
                                 : Container(),
@@ -115,6 +149,7 @@ class IncomeBottomSheet extends StatelessWidget {
                       ),
                     ),
                     Divider(),
+
                     SizedBox(
                       height: 20,
                     ),

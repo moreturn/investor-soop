@@ -7,10 +7,11 @@ import 'package:intl/intl.dart';
 import 'package:investor_soop/component/color.dart';
 import 'package:investor_soop/component/skeleton.dart';
 import 'package:investor_soop/component/typograph.dart';
-import 'package:investor_soop/model/income.dart';
-import 'package:investor_soop/model/property.dart';
-import 'package:investor_soop/page/income/@bottom_sheet.dart';
+import 'package:investor_soop/model/chart_data.dart';
+import 'package:investor_soop/model/fetched_value.dart';
+
 import 'package:investor_soop/page/income/controller/income_controller.dart';
+import 'package:investor_soop/page/@bottom_sheet.dart';
 import 'package:investor_soop/page/property/controller/property_controller.dart';
 import 'package:investor_soop/services/auth_service.dart';
 import 'package:investor_soop/util/extension.dart';
@@ -34,8 +35,7 @@ class _IncomePageState extends State<IncomePage> {
     super.initState();
   }
 
-  Future<FetchedIncomeValue> fetch() {
-    print(DateFormat('yyyy-MM-dd').format(start.value));
+  Future<FetchedValue> fetch() {
     return controller.fetchIncome(DateFormat('yyyy-MM-dd').format(start.value));
   }
 
@@ -48,13 +48,13 @@ class _IncomePageState extends State<IncomePage> {
           return Container(
               padding: const EdgeInsets.all(16),
               child: Text(
-                '${data.x.toString().substring(0, 4)}년${data.x.toString().substring(4, 6)}월 : ${numberToKor((data.y).toInt().toString(), isAll: true)}원',
+                '${data.x.toString().substring(2, 4)}년${data.x.toString().substring(4, 6)}월 : ${numberToKor((data.y).toInt().toString(), isAll: true)}원',
                 style: const TextStyle(color: Colors.white),
               ));
         });
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
-      child: QueryBuilder<FetchedIncomeValue, dynamic>(
+      child: QueryBuilder<FetchedValue, dynamic>(
           '${Get.find<AuthService>().userId}-income-summary', () => fetch(),
           onData: (value) {
         // Map<String, int> credit = value['data']['credit'];
@@ -64,7 +64,6 @@ class _IncomePageState extends State<IncomePage> {
         // print(query.data);
         return Obx(
           () {
-            print(controller.showType);
             return Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
@@ -81,13 +80,14 @@ class _IncomePageState extends State<IncomePage> {
                         GestureDetector(
                           onTap: () {
                             Get.bottomSheet(
-                                IncomeBottomSheet(
+                                PropertyBottomSheet(
                                     controller,
                                     controller
                                         .selector(
-                                            query.data!.chartData,
-                                            query.data!.collateralChartData,
-                                            query.data!.creditChartData)
+                                          query.data!.collateralChartData,
+                                          query.data!.creditChartData,
+                                          query.data!.otherChartData,
+                                        )
                                         .map<int>((d) => (d.y).toInt())
                                         .toList()
                                         .reduceWithSeed(
@@ -130,7 +130,11 @@ class _IncomePageState extends State<IncomePage> {
                         )
                       : Text(
                           ''
-                          '${controller.selector(query.data!.chartData, query.data!.collateralChartData, query.data!.creditChartData).map<int>((d) => (d.y).toInt()).toList().reduceWithSeed((acc, cur) => acc + cur, 0).toString().setComma()} 원',
+                          '${controller.selector(
+                                query.data!.collateralChartData,
+                                query.data!.creditChartData,
+                                query.data!.otherChartData,
+                              ).map<int>((d) => (d.y).toInt()).toList().reduceWithSeed((acc, cur) => acc + cur, 0).toString().setComma()} 원',
                           style: h1(bold: true, color: Colors.black)),
                   const SizedBox(
                     height: 32,
@@ -206,9 +210,10 @@ class _IncomePageState extends State<IncomePage> {
                         )
                       : controller
                               .selector(
-                                  query.data!.chartData,
-                                  query.data!.collateralChartData,
-                                  query.data!.creditChartData)
+                                query.data!.collateralChartData,
+                                query.data!.creditChartData,
+                                query.data!.otherChartData,
+                              )
                               .isEmpty
                           ? Container(
                               width: double.infinity,
@@ -226,21 +231,19 @@ class _IncomePageState extends State<IncomePage> {
                                   ),
                                   primaryYAxis: NumericAxis(
                                     isVisible: true,
-                                    minimum: controller
-                                        .selector(
-                                            query.data!.chartMin,
-                                            query.data!.collateralChartMin,
-                                            query.data!.creditChartMin)
-                                        .toDouble(),
+                                    // minimum: controller
+                                    //     .selector(
+                                    //         query.data!.chartMin,
+                                    //         query.data!.collateralChartMin,
+                                    //         query.data!.creditChartMin,)
+                                    //     .toDouble(),
                                     rangePadding: ChartRangePadding.round,
-
                                     majorGridLines: const MajorGridLines(
                                         width: 1, dashArray: [3.0, 6]),
                                   ),
                                   tooltipBehavior: _tooltip,
-                                  series: <ChartSeries<IncomeChartData,
-                                      String>>[
-                                    FastLineSeries<IncomeChartData, String>(
+                                  series: <ChartSeries<ChartData, String>>[
+                                    FastLineSeries<ChartData, String>(
                                       dataLabelSettings:
                                           const DataLabelSettings(
                                         isVisible: true,
@@ -248,10 +251,10 @@ class _IncomePageState extends State<IncomePage> {
                                         labelAlignment:
                                             ChartDataLabelAlignment.bottom,
                                       ),
-                                      dataLabelMapper: (d, i)
-                                      {
-
-                                        return d.y.toInt() > 0 ? '${numberToKor(d.y.toInt().toString())}원' : '';
+                                      dataLabelMapper: (d, i) {
+                                        return d.y.toInt() > 0
+                                            ? '${numberToKor(d.y.toInt().toString())}원'
+                                            : '';
                                       },
                                       selectionBehavior: SelectionBehavior(
                                         enable: true,
@@ -261,12 +264,13 @@ class _IncomePageState extends State<IncomePage> {
                                       ),
                                       dataSource: controller
                                           .selector(
-                                              query.data!.chartData,
-                                              query.data!.collateralChartData,
-                                              query.data!.creditChartData)
-                                          .indexedMap<IncomeChartData>(
+                                        query.data!.collateralChartData,
+                                        query.data!.creditChartData,
+                                        query.data!.otherChartData,
+                                      )
+                                          .indexedMap<ChartData>(
                                               (element, index, array) {
-                                        List<IncomeChartData> a = [];
+                                        List<ChartData> a = [];
                                         a.addAll(array);
                                         double sum = a
                                             .indexedWhere(
@@ -277,13 +281,11 @@ class _IncomePageState extends State<IncomePage> {
                                             .toList()
                                             .reduceWithSeed(
                                                 (acc, cur) => acc + cur, 0);
-                                        return IncomeChartData(
+                                        return ChartData(
                                             element.x, sum + element.y);
                                       }).toList(),
-                                      xValueMapper: (IncomeChartData cd, _) =>
-                                          cd.x,
-                                      yValueMapper: (IncomeChartData cd, _) =>
-                                          cd.y,
+                                      xValueMapper: (ChartData cd, _) => cd.x,
+                                      yValueMapper: (ChartData cd, _) => cd.y,
                                       color: deepBlue,
                                       opacity: 1,
                                     )
@@ -316,19 +318,19 @@ class _IncomePageState extends State<IncomePage> {
                               maxWidth: MediaQuery.of(context).size.width *
                                   (controller
                                               .selector(
-                                                  query.data!.chartData,
-                                                  query.data!
-                                                      .collateralChartData,
-                                                  query.data!.creditChartData)
+                                                query.data!.collateralChartData,
+                                                query.data!.creditChartData,
+                                                query.data!.otherChartData,
+                                              )
                                               .length <=
                                           6
                                       ? 1
                                       : controller
                                               .selector(
-                                                  query.data!.chartData,
-                                                  query.data!
-                                                      .collateralChartData,
-                                                  query.data!.creditChartData)
+                                                query.data!.collateralChartData,
+                                                query.data!.creditChartData,
+                                                query.data!.otherChartData,
+                                              )
                                               .length /
                                           6),
                             ),
@@ -338,34 +340,34 @@ class _IncomePageState extends State<IncomePage> {
                                   isVisible: true,
                                   axisLabelFormatter: (s) {
                                     return ChartAxisLabel(
-                                        '${s.text.substring(0,4)}년\n${s.text.substring(4, 6)}월',
-                                        label3(color: deepBlue));
+                                        '${s.text.substring(2, 4)}년${s.text.substring(4, 6)}월',
+                                        label4(color: deepBlue));
                                   },
                                   majorGridLines:
                                       const MajorGridLines(width: 0),
                                 ),
                                 primaryYAxis: NumericAxis(
                                   isVisible: false,
-                                  minimum: controller
-                                      .selector(
-                                          query.data!.chartMin,
-                                          query.data!.collateralChartMin,
-                                          query.data!.creditChartMin)
-                                      .toDouble(),
+                                  // minimum: controller
+                                  //     .selector(
+                                  //         query.data!.chartMin,
+                                  //         query.data!.collateralChartMin,
+                                  //         query.data!.creditChartMin,)
+                                  //     .toDouble(),
                                   rangePadding: ChartRangePadding.round,
                                   majorGridLines:
                                       const MajorGridLines(width: 0),
                                 ),
                                 tooltipBehavior: _tooltip,
-                                series: <ChartSeries<IncomeChartData, String>>[
-                                  ColumnSeries<IncomeChartData, String>(
+                                series: <ChartSeries<ChartData, String>>[
+                                  ColumnSeries<ChartData, String>(
                                     dataLabelSettings: const DataLabelSettings(
                                       isVisible: true,
                                     ),
                                     dataLabelMapper: (d, i) {
-
-
-                                      return (d.y / 10000).toInt() > 0 ? '${NumberFormat('###,###,###,###,###').format((d.y / 10000).toInt())}만원' : '';
+                                      return (d.y / 10000).toInt() > 0
+                                          ? '${NumberFormat('###,###,###,###,###').format((d.y / 10000).toInt())}만원'
+                                          : '';
                                     },
                                     selectionBehavior: SelectionBehavior(
                                       enable: true,
@@ -375,13 +377,12 @@ class _IncomePageState extends State<IncomePage> {
                                     ),
                                     spacing: 0.2,
                                     dataSource: controller.selector(
-                                        query.data!.chartData,
-                                        query.data!.collateralChartData,
-                                        query.data!.creditChartData),
-                                    xValueMapper: (IncomeChartData cd, _) =>
-                                        cd.x,
-                                    yValueMapper: (IncomeChartData cd, _) =>
-                                        cd.y,
+                                      query.data!.collateralChartData,
+                                      query.data!.creditChartData,
+                                      query.data!.otherChartData,
+                                    ),
+                                    xValueMapper: (ChartData cd, _) => cd.x,
+                                    yValueMapper: (ChartData cd, _) => cd.y,
                                     borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(4),
                                         topRight: Radius.circular(4)),

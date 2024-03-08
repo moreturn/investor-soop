@@ -1,63 +1,25 @@
+import 'package:investor_soop/controller/base_controller.dart';
+import 'package:investor_soop/model/fetched_value.dart';
 import 'package:get/get.dart';
-import 'package:investor_soop/model/property.dart';
-import 'package:investor_soop/services/auth_service.dart';
-import 'package:investor_soop/services/http_service.dart';
 
-class PropertyController extends GetxController {
-  final RxBool _isLoading = false.obs;
-  final HttpService _httpService = Get.find<HttpService>();
-  final AuthService _authService = Get.find<AuthService>();
-
-  final show = RxMap({"collateral": true, "credit": true});
-
-  PropertyShowType get showType =>
-      !(show['collateral'] ?? false) && !(show['credit'] ?? false)
-          ? PropertyShowType.none
-          : (show['collateral'] ?? false) && (show['credit'] ?? false)
-              ? PropertyShowType.all
-              : (show['collateral'] ?? false)
-                  ? PropertyShowType.collateral
-                  : PropertyShowType.credit;
-
-  Future<FetchedPropertyValue> fetchProperty() async {
+class PropertyController extends BaseController {
+  Future<FetchedValue> fetchProperty() async {
     dynamic value;
-
-    if (_authService.isGuest.isTrue) {
+    if (authService.isGuest.isTrue) {
       value = sample;
     } else {
-      value = await _httpService.get<Map<String, dynamic>>('property_summary');
+      value = await httpService.get<Map<String, dynamic>>('property_summary');
     }
 
-    return FetchedPropertyValue(value['data']);
+    return FetchedValue(value['data']);
   }
 
   @override
   void onInit() {
-    // ever(listData, (value) {
-    //   print('listData changed');
-    //   calc();
-    // });
-    // ever(show, (value) {
-    //   print('show changed');
-    // calc();
-    // });
     super.onInit();
   }
 
-  calc() {}
-
-  T selector<T>(T both, T collateral, T credit, {T? none}) {
-    switch (showType) {
-      case PropertyShowType.all:
-        return both;
-      case PropertyShowType.credit:
-        return credit;
-      case PropertyShowType.collateral:
-        return collateral;
-      case PropertyShowType.none:
-        return none ?? both;
-    }
-  }
+// Your remaining code here...
 }
 
 const dynamic sample = {

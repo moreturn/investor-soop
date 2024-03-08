@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:investor_soop/services/auth_service.dart';
 import 'package:investor_soop/services/env_service.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+
 class HttpService extends GetxController {
   Future<HttpService> init() async => this;
   final _env = Get.find<EnvService>();
@@ -16,6 +18,14 @@ class HttpService extends GetxController {
 
   factory HttpService() {
     return _instance;
+  }
+
+  static launchURL(String urlString) async {
+    if (await canLaunchUrl(Uri.parse(urlString))) {
+      await launchUrl(Uri.parse(urlString),mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch $urlString';
+    }
   }
 
   Future<T> post<T>(String url, dynamic body, {String? token}) async {

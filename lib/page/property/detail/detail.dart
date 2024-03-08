@@ -4,6 +4,7 @@ import 'package:investor_soop/component/button.dart';
 import 'package:investor_soop/component/color.dart';
 import 'package:investor_soop/component/typograph.dart';
 import 'package:investor_soop/model/property.dart';
+import 'package:investor_soop/services/http_service.dart';
 import 'package:investor_soop/util/extension.dart';
 import 'package:investor_soop/util/toast.dart';
 import 'package:intl/intl.dart';
@@ -26,7 +27,7 @@ class DetailPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                Get.arguments['type'] == 'COLLATERAL' ? '담보 단지명' : '투자기간',
+                '투자계약번호',
                 style: h6(color: gray300),
               ),
               Text(
@@ -264,77 +265,53 @@ class PropertyTile extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Get.arguments['type'] == 'COLLATERAL'
-                        ? Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Flexible(
-                                child: Button(
-                                  onPressed: () {
-                                    Toast.warn('준비중');
-                                  },
-                                  width: double.infinity,
-                                  color: warmGray50,
-                                  borderColor: gray300,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '물건 안내서',
-                                        style: label3(color: gray300).copyWith(
-                                            fontWeight: FontWeight.w500),
+                    Container(
+                      width: double.infinity,
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        alignment: WrapAlignment.spaceBetween,
+
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: proceedProperty.files
+                            .map<Widget>((Map<String, dynamic> file) =>
+                            Container(
+                              height: 42,
+                              width: MediaQuery.of(context).size.width / 2 - 40,
+                              child: Button(
+                                onPressed: () {
+                                  HttpService.launchURL(file['location']);
+                                },
+                                width: double.infinity,
+                                color: warmGray50,
+                                borderColor: gray300,
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                                  crossAxisAlignment:
+                                  CrossAxisAlignment.center,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        file['name'],
+                                        style: label3(color: gray300)
+                                            .copyWith(
+                                            overflow: TextOverflow
+                                                .ellipsis,
+                                            fontWeight:
+                                            FontWeight.w500),
                                       ),
-                                      const SizedBox(
-                                        width: 4,
-                                      ),
-                                      const Icon(
-                                        Icons.description_outlined,
-                                        color: gray300,
-                                        size: 16,
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                  ],
                                 ),
                               ),
-                              const SizedBox(
-                                width: 16,
-                              ),
-                              Flexible(
-                                child: Button(
-                                  onPressed: () {
-                                    Toast.warn('준비중');
-                                  },
-                                  width: double.infinity,
-                                  color: warmGray50,
-                                  borderColor: gray300,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '심사 보고서',
-                                        style: label3(color: gray300).copyWith(
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      const SizedBox(
-                                        width: 4,
-                                      ),
-                                      const Icon(
-                                        Icons.description_outlined,
-                                        color: gray300,
-                                        size: 16,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
-                        : Container()
+                            ))
+                            .toList(),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -348,3 +325,16 @@ class PropertyTile extends StatelessWidget {
     );
   }
 }
+
+class ButtonInfo {
+  final String text;
+  final IconData icon;
+
+  ButtonInfo(this.text, this.icon);
+}
+
+List<ButtonInfo> buttons = [
+  ButtonInfo('물건 안내서', Icons.description_outlined),
+  ButtonInfo('심사 보고서', Icons.description_outlined),
+  // Add more ButtonInfos as necessary
+];

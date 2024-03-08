@@ -10,7 +10,7 @@ class PropertyDetailTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String title = Get.arguments['type'] == 'COLLATERAL' ? "GPL" : "담보대출";
+    String title =  Get.arguments['type'] == 'OTHER' ? "벤처투자" : Get.arguments['type'] == 'COLLATERAL' ? "GPL" : "담보대출";
 
     return DefaultTabController(
       length: 2,
