@@ -1,8 +1,17 @@
 import 'package:investor_soop/model/chart_data.dart';
 
+class Collateral {
+  late final String address;
+  late final int priority;
+  late final String state;
+
+  Collateral(this.address, this.priority, this.state);
+}
+
 class ProceedProperty {
   late final String companyName;
-  late final String? address;
+  late final List<Collateral> collateral;
+
   late final DateTime executeDate;
   late final DateTime expireDate;
   late final double interestRate;
@@ -18,7 +27,7 @@ class ProceedProperty {
 
   ProceedProperty(
       {required this.companyName,
-      this.address,
+      collateral,
       required this.executeDate,
       required this.expireDate,
       required this.interestRate,
@@ -34,9 +43,11 @@ class ProceedProperty {
 
   ProceedProperty.fromJson(Map<String, dynamic> json) {
     try {
-
+      print(json);
       companyName = json['companyName'];
-      address = json['address'];
+      collateral = (json['collateral'] ?? []).map<Collateral>((d) {
+        return Collateral(d['address'], d['priority'], d['state']);
+      }).toList();
       executeDate = DateTime.parse(json['executeDate']).toLocal();
       expireDate = DateTime.parse(json['expireDate']).toLocal();
       interestRate = double.parse(json['interestRate'].toString());
@@ -49,7 +60,6 @@ class ProceedProperty {
       balance = json['balance'];
       interestPaymentType = json['interestPaymentType'];
       files = List.from(json['files']);
-
     } catch (e) {
       print(e);
     }
@@ -58,7 +68,7 @@ class ProceedProperty {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['companyName'] = companyName;
-    data['address'] = address;
+    data['collateral'] = collateral;
     data['executeDate'] = executeDate;
     data['expireDate'] = expireDate;
     data['interestRate'] = interestRate;

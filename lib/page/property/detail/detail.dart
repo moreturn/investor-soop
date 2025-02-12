@@ -6,6 +6,7 @@ import 'package:investor_soop/component/typograph.dart';
 import 'package:investor_soop/model/property.dart';
 import 'package:investor_soop/services/http_service.dart';
 import 'package:investor_soop/util/extension.dart';
+import 'package:investor_soop/util/numberToKor.dart';
 import 'package:investor_soop/util/toast.dart';
 import 'package:intl/intl.dart';
 
@@ -84,6 +85,9 @@ class PropertyTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    int tax = calcWithholdingTax( proceedProperty.tax,proceedProperty.regularInterest.toDouble());
+
     return Theme(
       data: ThemeData(
         dividerColor: Colors.transparent,
@@ -132,24 +136,52 @@ class PropertyTile extends StatelessWidget {
                       ],
                     ),
                     Get.arguments['type'] == 'COLLATERAL'
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '담보주소',
-                                style: h6(color: gray300),
-                              ),
-                              const SizedBox(width: 16),
-                              Flexible(
-                                child: Text(
-                                  proceedProperty.address ?? '-',
-                                  textAlign: TextAlign.end,
-                                  style: h6(color: Colors.black87),
-                                ),
-                              ),
-                            ],
-                          )
+                        ? proceedProperty.collateral.isEmpty
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '담보주소',
+                                    style: h6(color: gray300),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Flexible(
+                                    child: Text(
+                                      '투자대기중',
+                                      textAlign: TextAlign.end,
+                                      style: h6(color: Colors.black87),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                children: proceedProperty.collateral
+                                    .indexedMap<Widget>((d, i, c) {
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    i == 0
+                                        ? Text(
+                                            '담보주소',
+                                            style: h6(color: gray300),
+                                          )
+                                        : Container(),
+                                    const SizedBox(width: 16),
+                                    Flexible(
+                                      child: Text(
+                                        proceedProperty.collateral[i].address ??
+                                            '-',
+                                        textAlign: TextAlign.end,
+                                        style: h6(color: Colors.black87),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }).toList())
                         : Container(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -240,7 +272,7 @@ class PropertyTile extends StatelessWidget {
                         const SizedBox(width: 16),
                         Flexible(
                           child: Text(
-                            '${(proceedProperty.regularInterest * (proceedProperty.tax / 100)).toInt().setComma()}원\n(${proceedProperty.tax}%)',
+                            '${tax.setComma()}원\n(${proceedProperty.tax}%)',
                             textAlign: TextAlign.end,
                             style: h6(color: Colors.black87),
                           ),
@@ -258,7 +290,7 @@ class PropertyTile extends StatelessWidget {
                         const SizedBox(width: 16),
                         Flexible(
                           child: Text(
-                            '${(proceedProperty.regularInterest - (proceedProperty.regularInterest * (proceedProperty.tax / 100)).toInt()).setComma()}원',
+                            '${(proceedProperty.regularInterest - tax).setComma()}원',
                             textAlign: TextAlign.end,
                             style: h6(color: Colors.black87, bold: true),
                           ),
@@ -270,45 +302,45 @@ class PropertyTile extends StatelessWidget {
                       child: Wrap(
                         direction: Axis.horizontal,
                         alignment: WrapAlignment.spaceBetween,
-
                         spacing: 8,
                         runSpacing: 8,
                         children: proceedProperty.files
                             .map<Widget>((Map<String, dynamic> file) =>
-                            Container(
-                              height: 42,
-                              width: MediaQuery.of(context).size.width / 2 - 40,
-                              child: Button(
-                                onPressed: () {
-                                  HttpService.launchURL(file['location']);
-                                },
-                                width: double.infinity,
-                                color: warmGray50,
-                                borderColor: gray300,
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.center,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  children: [
-                                    Flexible(
-                                      child: Text(
-                                        file['name'],
-                                        style: label3(color: gray300)
-                                            .copyWith(
-                                            overflow: TextOverflow
-                                                .ellipsis,
-                                            fontWeight:
-                                            FontWeight.w500),
-                                      ),
+                                Container(
+                                  height: 42,
+                                  width: MediaQuery.of(context).size.width / 2 -
+                                      40,
+                                  child: Button(
+                                    onPressed: () {
+                                      HttpService.launchURL(file['location']);
+                                    },
+                                    width: double.infinity,
+                                    color: warmGray50,
+                                    borderColor: gray300,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            file['name'],
+                                            style: label3(color: gray300)
+                                                .copyWith(
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          width: 4,
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(
-                                      width: 4,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ))
+                                  ),
+                                ))
                             .toList(),
                       ),
                     )

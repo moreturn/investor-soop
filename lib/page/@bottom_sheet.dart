@@ -34,7 +34,7 @@ class PropertyBottomSheet extends StatelessWidget {
                   child: RichText(
                       text: TextSpan(style: h2(), children: <TextSpan>[
                     TextSpan(
-                        text: '총 자산\n',
+                        text: '총 투자금\n',
                         style: h5(color: Colors.black, bold: true)),
                     TextSpan(
                         text: lastMonth.setComma() + '원',

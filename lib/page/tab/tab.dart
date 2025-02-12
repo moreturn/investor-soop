@@ -53,7 +53,7 @@ class TabPage extends GetView<MainTabController> {
                       : SvgPicture.asset(
                           'assets/icons/ic_card.svg',
                         ),
-                  label: "자산"),
+                  label: "투자"),
               BottomNavigationBarItem(
                   icon: controller.selectedIndex.value == 1
                       ? SvgPicture.asset(
@@ -62,7 +62,7 @@ class TabPage extends GetView<MainTabController> {
                       : SvgPicture.asset(
                           'assets/icons/ic_sign.svg',
                         ),
-                  label: "수익"),
+                  label: "이자"),
               BottomNavigationBarItem(
                   icon: controller.selectedIndex.value == 2
                       ? SvgPicture.asset(

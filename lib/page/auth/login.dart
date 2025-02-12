@@ -1,18 +1,16 @@
 import 'dart:math' as math;
 
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:investor_soop/component/button.dart';
 import 'package:investor_soop/component/color.dart';
 import 'package:investor_soop/component/typograph.dart';
-import 'package:get/get.dart';
-import 'package:investor_soop/controller/tab_controller.dart';
 import 'package:investor_soop/page/auth/@code.dart';
 import 'package:investor_soop/services/auth_service.dart';
-import 'package:investor_soop/page/tab/tab.dart';
 import 'package:investor_soop/services/env_service.dart';
-import 'package:toastify/toastify.dart';
-import 'package:another_flushbar/flushbar.dart';
+import 'package:investor_soop/services/http_service.dart';
 
 final _formKey = GlobalKey<FormState>();
 
@@ -38,7 +36,9 @@ class _LoginPageState extends State<LoginPage> {
     return Stack(
       children: [
         Scaffold(
+          backgroundColor: Colors.white,
           body: Material(
+            color: Colors.red,
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -142,6 +142,7 @@ class _LoginPageState extends State<LoginPage> {
 
                                           Get.offAllNamed('/tab');
                                         } catch (e) {
+                                          print(e);
                                           Flushbar(
                                             message:
                                                 "로그인 실패 \n ${e.toString()}",
@@ -203,6 +204,19 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         Positioned(
+          left:16,
+          top:0,
+          child: SafeArea(
+            child: IconButton(
+              key: const Key('add_random'),
+              onPressed: (){
+                Get.back();
+              },
+              icon: const Icon(Icons.arrow_back),
+            ),
+          ),
+        ),
+        Positioned(
           bottom: 0,
           child: !isKeyboard
               ? SafeArea(
@@ -223,6 +237,10 @@ class _LoginPageState extends State<LoginPage> {
                               horizontal: 16,
                             ),
                             child: Button(
+                              onPressed: () {
+                                HttpService.launchURL(
+                                    'https://pf.kakao.com/_xhxohxbxb/chat');
+                              },
                               color: const Color(0xFFFAE300),
                               child: Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.center,

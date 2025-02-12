@@ -7,9 +7,11 @@ import 'package:investor_soop/component/button.dart';
 import 'package:investor_soop/component/color.dart';
 import 'package:investor_soop/component/typograph.dart';
 import 'package:investor_soop/page/setting/@bottom_sheet.dart';
+import 'package:investor_soop/page/setting/@policy_sheet.dart';
 import 'package:investor_soop/services/auth_service.dart';
 import 'package:get/get.dart';
 import 'package:investor_soop/services/env_service.dart';
+import 'package:investor_soop/services/http_service.dart';
 import 'package:investor_soop/util/toast.dart';
 
 class SettingPage extends GetView<AuthService> {
@@ -89,6 +91,9 @@ class SettingPage extends GetView<AuthService> {
                 horizontal: 16,
               ),
               child: Button(
+                onPressed: (){
+                  HttpService.launchURL('https://pf.kakao.com/_xhxohxbxb/chat');
+                },
                 color: const Color(0xFFFAE300),
                 child: Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
@@ -109,7 +114,9 @@ class SettingPage extends GetView<AuthService> {
               child: Column(
                 children: [
                   ListTile(
-                    onTap: () {},
+                    onTap: () {
+                      Get.bottomSheet(PolicySheet());
+                    },
                     title: Text('이용약관', style: h3()),
                   ),
                   Divider(),

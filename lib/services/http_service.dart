@@ -22,7 +22,8 @@ class HttpService extends GetxController {
 
   static launchURL(String urlString) async {
     if (await canLaunchUrl(Uri.parse(urlString))) {
-      await launchUrl(Uri.parse(urlString),mode: LaunchMode.externalApplication);
+      await launchUrl(Uri.parse(urlString),
+          mode: LaunchMode.externalApplication);
     } else {
       throw 'Could not launch $urlString';
     }
@@ -30,6 +31,7 @@ class HttpService extends GetxController {
 
   Future<T> post<T>(String url, dynamic body, {String? token}) async {
     try {
+      print('asdfasdf222');
       Uri uri = Uri.parse(_env.apiEndPoint + url);
       http.Response res = await http.post(uri, body: body, headers: {
         "Authorization": token ?? await _auth.getToken() ?? '',
@@ -38,8 +40,9 @@ class HttpService extends GetxController {
 
       if (res.statusCode < 200 || 299 < res.statusCode) {
         dynamic json = jsonDecode(res.body.toString());
-        throw json['error'] ?? json['message'] ?? '예기치못한 오류';
+        throw json['message'] ?? json['error'] ?? '예기치못한 오류';
       }
+
       return jsonDecode(res.body.toString());
     } catch (e) {
       rethrow;
@@ -56,7 +59,7 @@ class HttpService extends GetxController {
 
       if (res.statusCode < 200 || 299 < res.statusCode) {
         dynamic json = jsonDecode(res.body.toString());
-        throw json['error'] ?? json['message'] ?? '예기치못한 오류';
+        throw json['message'] ?? json['error'] ?? '예기치못한 오류';
       }
       return jsonDecode(res.body.toString()) as T;
     } catch (e) {
@@ -74,7 +77,7 @@ class HttpService extends GetxController {
 
       if (res.statusCode < 200 || 299 < res.statusCode) {
         dynamic json = jsonDecode(res.body.toString());
-        throw json['error'] ?? json['message'] ?? '예기치못한 오류';
+        throw json['message'] ?? json['error'] ?? '예기치못한 오류';
       }
       return jsonDecode(res.body.toString());
     } catch (e) {
@@ -92,7 +95,7 @@ class HttpService extends GetxController {
 
       if (res.statusCode < 200 || 299 < res.statusCode) {
         dynamic json = jsonDecode(res.body.toString());
-        throw json['error'] ?? json['message'] ?? '예기치못한 오류';
+        throw json['message'] ?? json['error'] ?? '예기치못한 오류';
       }
       return jsonDecode(res.body.toString());
     } catch (e) {

@@ -97,6 +97,17 @@ String numberToKor(String arg,
           suffix;
     }
   } catch (e) {
-    return 'wrong number';
+    return arg;
   }
+}
+
+int calcWithholdingTax(double taxRate, double amount) {
+
+  double nationalTax = double.parse((taxRate / 1.1 / 100).toStringAsFixed(2));
+  print('n :${(amount * nationalTax).floor() / 10 * 10}');
+  double localTax = double.parse((taxRate / 11 / 100).toStringAsFixed(4));
+  print('l ${(amount * localTax).floor() / 10 * 10}');
+
+  double remainder = amount * nationalTax % 10 + (amount * localTax) % 10;
+  return ((amount * nationalTax / 10).floor() * 10 + (amount * localTax / 10).floor() * 10).toInt();
 }

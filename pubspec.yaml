@@ -16,10 +16,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.2+7
+version: 1.0.6+17
 
 environment:
-  sdk: '>=3.1.5 <4.0.0'
+  sdk: '>=3.1.5 <3.22.2'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -32,17 +32,25 @@ dependencies:
     sdk: flutter
   flutter_localizations: # Add this line
     sdk: flutter         # Add this line
-  flutter_svg: 2.0.8
-  syncfusion_flutter_charts: 23.1.43
-  intl: 0.18.1
-  flutter_secure_storage: 9.0.0
-  http: 1.1.0
-  fl_query: 1.0.0
+  flutter_svg: ^2.0.10+1
+  intl: ^0.19.0
+  flutter_secure_storage: ^9.2.2
+  http: ^1.2.1
+  fl_query: ^1.1.0
+  syncfusion_flutter_charts:
+    git:
+      url: https://github.com/Luvti/flutter-widgets
+      path: packages/syncfusion_flutter_charts
+      ref: 15e3c4a95e3cf2e2393755bf5aa11c0206ed6dea #flutter/3.24
+
+  get: 4.6.6
   shimmer:
   encrypt:
   fast_rsa:
   rsa_encrypt:
   url_launcher:
+  toastify:
+  another_flushbar:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -51,16 +59,15 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  get: 4.6.6
-  toastify:
-  another_flushbar:
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
   flutter_native_splash: ^2.3.5
   flutter_launcher_icons: "^0.13.1"
 
@@ -68,7 +75,7 @@ flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/icon2.png"
-  min_sdk_android: 21 # android min sdk min:16, default 21
+  min_sdk_android: 34 # android min sdk min:16, default 21
 
 
 # For information on the generic Dart part of this file, see the

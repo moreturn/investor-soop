@@ -13,9 +13,17 @@ import 'package:fast_rsa/fast_rsa.dart';
 class AuthService extends GetxController {
   final RxBool isLogin = false.obs;
   final RxBool isGuest = false.obs;
-  final storage = const FlutterSecureStorage();
+
+  late final storage;
   RxList<Token> tokens = RxList([]);
   String userId = 'guest';
+
+  AuthService() {
+    AndroidOptions getAndroidOptions() => const AndroidOptions(
+          encryptedSharedPreferences: true,
+        );
+    storage = FlutterSecureStorage(aOptions: getAndroidOptions());
+  }
 
   Future<AuthService> init() async {
     String? value = await storage.read(key: 'tokens');
@@ -50,8 +58,10 @@ class AuthService extends GetxController {
 
   Future<bool> login({required String id, required String password}) async {
     try {
+      print('asdfasdf');
       dynamic b = await HttpService()
-          .post('login', {"id": id, "password": await encrypt(password)});
+          .post('login', {"id": id, "password": password});
+
 
       List<Token> tokens =
           ((jsonDecode(await storage.read(key: 'tokens') ?? '[]'))

@@ -7,11 +7,11 @@ import 'package:investor_soop/services/auth_service.dart';
 class EnvService extends GetxController {
   get serviceCode => '1';
 
-  get companyGroupCode => isProd.isTrue ? '28ab2275' : devGroupCode;
+  get companyGroupCode => isProd.isTrue ? 'CVFR7WTQ' : devGroupCode;
 
   get apiEndPoint => isProd.isFalse
-      ? 'http://localhost:3005/investor/'
-      // ? 'https://tapi.moneyparking.co.kr/investor/'
+      // ? 'http://localhost:3005/investor/'
+      ? 'https://tapi.moneyparking.co.kr/investor/'
       : 'https://api.moneyparking.co.kr/investor/';
 
   late String devGroupCode;

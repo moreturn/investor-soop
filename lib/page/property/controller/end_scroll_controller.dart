@@ -72,37 +72,21 @@ class EndScrollController extends GetxController {
 const sample = {
   "data": [
     {
-      "idx": 1,
-      "companyName": "숲자산관리대부",
-      "address": "서울특별시 마포구 래미안공덕5차 101동 0000호",
-      "executeDate": "2023-01-12T15:00:00.000Z",
-      "expireDate": "2024-01-12T15:00:00.000Z",
-      "interestRate": 12,
-      "amount": 39740000,
-      "balance": 39740000,
+      "idx": -1,
+      "companyName": "테스트대부",
+      "executeDate": "2023-11-30T15:00:00.000Z",
+      "expireDate": "2024-11-30T15:00:00.000Z",
+      "interestRate": 10,
+      "amount": 100000000,
+      "balance": 0,
       "interestPaymentType": "MONTHLY",
-      "title": "래미안 공덕 5차",
+      "title": "02",
+      "files" : [],
       "currency": "KRW",
       "amountByCurrency": 0,
-      "regularInterest": 1000000,
-      "tax": 27.5
-    },
-    {
-      "idx": 2,
-      "companyName": "근저당권업체명123",
-      "address": "1231",
-      "executeDate": "2022-11-12T15:00:00.000Z",
-      "expireDate": "2024-11-12T15:00:00.000Z",
-      "interestRate": 18,
-      "amount": 3650000,
-      "balance": 3650000,
-      "interestPaymentType": "MONTHLY",
-      "title": "김종원아파트",
-      "currency": "KRW",
-      "amountByCurrency": 0,
-      "regularInterest": 54750,
-      "tax": 3.3
+      "regularInterest": 83333333,
+      "tax": 0
     }
   ],
-  "maxCount": 2
+  "maxCount": 1
 };
