@@ -29,7 +29,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
     namespace "kr.co.moreturn.i.soop"
 
     compileOptions {
@@ -50,8 +50,7 @@ android {
         applicationId "kr.co.moreturn.i.soop"
 
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
-        compileSdkVersion flutter.compileSdkVersion
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
