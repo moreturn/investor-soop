@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.7+18
+version: 1.0.7+19
 
 environment:
   sdk: '>=3.1.5 <3.22.2'
@@ -56,8 +56,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
-
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -65,21 +63,19 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
   flutter_native_splash: ^2.3.5
-  flutter_launcher_icons: "^0.13.1"
+  flutter_launcher_icons: '^0.13.1'
 
 flutter_launcher_icons:
-  android: "launcher_icon"
+  android: 'launcher_icon'
   ios: true
-  image_path: "assets/icon2.png"
+  image_path: 'assets/icon2.png'
   min_sdk_android: 34 # android min sdk min:16, default 21
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -90,7 +86,6 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/public_key/
-
 
   fonts:
     - family: SpoqaHanSansNeo
@@ -105,7 +100,6 @@ flutter:
           weight: 500
         - asset: assets/fonts/SpoqaHanSansNeo-Bold.ttf
           weight: 700
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

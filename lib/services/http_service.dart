@@ -31,7 +31,7 @@ class HttpService extends GetxController {
 
   Future<T> post<T>(String url, dynamic body, {String? token}) async {
     try {
-      print('asdfasdf222');
+      // HTTP POST 요청 시작
       Uri uri = Uri.parse(_env.apiEndPoint + url);
       http.Response res = await http.post(uri, body: body, headers: {
         "Authorization": token ?? await _auth.getToken() ?? '',

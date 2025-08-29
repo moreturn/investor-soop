@@ -12,7 +12,10 @@ class IncomeController extends BaseController {
         value = await httpService
             .get<Map<String, dynamic>>('income_summary?start=$start');
       }
-    } catch (e) {}
+    } catch (e) {
+      // 에러 로깅 또는 처리 로직 추가
+      print('Income fetch error: $e');
+    }
 
     return FetchedValue(value['data']);
   }

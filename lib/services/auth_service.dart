@@ -58,7 +58,7 @@ class AuthService extends GetxController {
 
   Future<bool> login({required String id, required String password}) async {
     try {
-      print('asdfasdf');
+      // 로그인 요청 시작
       dynamic b = await HttpService()
           .post('login', {"id": id, "password": password});
 
