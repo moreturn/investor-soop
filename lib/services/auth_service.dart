@@ -60,7 +60,8 @@ class AuthService extends GetxController {
     try {
       // 로그인 요청 시작
       dynamic b = await HttpService()
-          .post('login', {"id": id, "password": password});
+          .post('login', {"id": id, "password": await encrypt(password)});
+
 
 
       List<Token> tokens =
